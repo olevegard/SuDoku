@@ -1942,7 +1942,7 @@ void  CBoard::solveLoop()
         {
 
             findUniqueInColumn( 1 );
-            findUniqueInColumn( 5 );
+            findUniqueInColumn( 6 );
         }
 
 
