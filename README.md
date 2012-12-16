@@ -5,11 +5,11 @@ It will only be able to solve SuDoku boards that have only one solution.
 The current version is able to solve most SuDokus withinn 1 ms  if running with optimization.
 
 Solving SuDokus
+
 	The solver works by adding possibilities into the struct cell. The board itself is held by
 	a 2D array of shorts ( 0 = unsolved. ) Whenever you insert a digit to a cell, the validity
 	of the move is checked. If the move is valid, the digit is added, the Cell structs are
 	updated ( set as solved ) and that digit is remove from any cells in that 
-	row/colum/3*3square. 
 
 	NOTE: There is a conflict between the 2d array of shorts and the 2D array of Cells:
 	The 2D array of shorts range from 1-9, whereas the Cells from 0-9. The plan is to change
