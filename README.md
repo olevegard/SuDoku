@@ -28,6 +28,7 @@ Solving SuDokus
 		-Checks for pointing pairs ( square->row and square->column)
 		-Checks for XWing ( row only )
 
+
 Compilation:
 I personally use g++ with the following flags
 -Werror
