@@ -129,7 +129,7 @@ void removeAllExceptPair ( const short shDigit1, const short shDigit2 )
     }
 }
 
-
+/*
 bool isPossibleTriplet( const short shCellNr )
 {
     short shCount = 0;
@@ -146,7 +146,7 @@ bool isPossibleTriplet( const short shCellNr )
 
     return ( shCount > 0 && shCount <= 3 );
 
-}
+}*/
 bool isNakedPair( const Cell &cell )
 {
     short shCountPossible = 0;
@@ -242,7 +242,6 @@ std::string print( ) const
 }
 
 	bool bSolved;
-
 
 	short shHiddenDouble1;
 	short shHiddenDouble2;

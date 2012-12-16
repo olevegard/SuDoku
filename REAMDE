@@ -1,0 +1,25 @@
+============================== SuDoku ==============================
+
+A ( for now ) simple SuDoku solver that uses human logics instead of brue force.
+It will only be able to solve SuDoku boards that have only one solution. 
+The current version is able to solve most SuDokus withinn 1 ms  if running with optimization.
+
+Solving SuDokus
+
+
+Compilation:
+I personally use g++ with the following flags
+-Werror
+-Wall
+-Weffc
+-Wextra
+-pedantic
+	This flags all adds warnings ( -Werror turns warnings into errors. ) 
+	This helps detecting logical errors and it tells you about unused/uninitialized variables.
+	The Werror flag "forces" you to fix any warnings
+-lrt
+-std=c++0x
+	Needed for some features
+
+Full compiler string
+	g++ main.cpp Board.cpp -Wall -Werror -Wextra -Weffc++ -pedantic -lrt -o SuDoku -std=c++0x 
