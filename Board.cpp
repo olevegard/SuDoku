@@ -284,7 +284,26 @@ bool CBoard::validateCoumn( const short shColumn){
 	}
 	return true;
 }
+bool CBoard::XWingHelper_Row(  )
+{
 
+    short iRow2 = 0;
+    bool bSucces = false;
+
+    for ( short iRow1 = 0; iRow1 < 9; ++iRow1 )
+    {
+        iRow2 = iRow1 + 1;
+
+        for ( ; iRow2 < 9; ++iRow2 )
+        {
+            if ( checkForXWing_Rows( iRow1, iRow2 ) )
+                bSucces = true;
+        }
+    }
+
+    return bSucces;
+
+}
 bool CBoard::checkForXWing_Rows( short iRow1, short iRow2 )
 {
 	if (PRINT_INFO )
@@ -1908,6 +1927,7 @@ bool CBoard::isDigitPlacedInSquare(short shColumn,short shRow, short shDigit)
 
 void  CBoard::solveLoop()
 {
+
     for (int i = 0; i < 9; ++i )
     {
 
@@ -1993,6 +2013,8 @@ void  CBoard::solveLoop()
 */
         }
     }
+
+    XWingHelper_Row();
 }
 
 

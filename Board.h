@@ -63,10 +63,12 @@ class CBoard{
 		bool checkForNakedPairs_SingleRow   ( const short shRow );                  // Checks an entire column for naked pairs
 		void checkForNakedTriplets_SingleRow( const short shRow );
 		bool checkForHiddenPairs_SingleRow  ( const short shRow );                  // Checks an entire column for hidden pairs
-		bool checkForXWing_Rows		    ( short iRow1, short iRow2 );			// Checks the two rows for XWing
+        bool checkForXWing_Rows             ( short iRow1, short iRow2 );			// Checks the two rows for XWing
+
 
 		// Helpers
 		int finCountOfDigitInRow( short iDigit, short iRow ); 					// Find how many celles iDigit can be place in withinn this row
+        bool XWingHelper_Row( );                                                // Calls all XWing possibilities
 
 		// Possibility removal...
 		bool findUniqueInRow                ( const short shRow );                  // Tries to find an unique digit in row.
