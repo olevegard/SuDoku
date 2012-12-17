@@ -1757,10 +1757,6 @@ void CBoard::printBoard( ){
 	printBoard( vector2d(-1,-1), vector2d(-1,-1));
 }
 
-void CBoard::printBoard( const short shColumn, const short shRow ){
-	printBoard( vector2d(shColumn,shRow), vector2d(-1,-1));
-}
-
 void CBoard::printBoard( const vector2d &pair1, const vector2d &pair2){
 	std::cout << "   =====================BOARD STATUS====================\n";
 	short j = 0;

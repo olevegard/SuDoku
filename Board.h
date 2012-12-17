@@ -29,7 +29,7 @@ class CBoard{
 		bool insert_Validate( const vector2d &pos, const short iDigit);
 
 		// Inserts a locked digit
-		bool insert_Lock( const vector2d &pos, const short iDigit);
+        bool insert_Lock( const vector2d &pos, const short iDigit);
 
 		// Get numbers filled in of a particular digit
 		short getProgressDigit(short shDigit);
@@ -37,11 +37,11 @@ class CBoard{
 		// Get numbers of digits filled out in total
 		short getTotatlProgress();
 
-		// Solves everything ( or as far as possible )
-		int solveEverythingRepeat();
+        // Solves everything ( or as far as possible )
+        int solveEverythingRepeat();
         void solveLoop();
 
-		bool insert(const vector2d &pos, short shDigit, bool bLocked = false );
+        bool insert(const vector2d &pos, short shDigit, bool bLocked = false );
 
 
 	private:
@@ -68,7 +68,7 @@ class CBoard{
 
 		// Helpers
 		int finCountOfDigitInRow( short iDigit, short iRow ); 					// Find how many celles iDigit can be place in withinn this row
-        bool XWingHelper_Row( );                                                // Calls all XWing possibilities
+        bool XWingHelper_Row( );                                // Calls all XWing possibilities
 
 		// Possibility removal...
 		bool findUniqueInRow                ( const short shRow );                  // Tries to find an unique digit in row.
@@ -127,7 +127,7 @@ class CBoard{
 
 		// Printing functions....
 		void printAllPosibilities();
-		void printBoard( const short shColumn, const short shRow);      // Prints the board and highlights a single cell
+        void printBoard( const short shColumn, const short shRow);      // Prints the board and highlights a single cell
 		void printBoard( const vector2d &pair1, const vector2d &pair2); // Prints the entire board and highlights two cells.
 
 		// Helper functions for insert
