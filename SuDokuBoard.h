@@ -16,7 +16,7 @@ class CSuDokuBoard{
         // Loads the board TODO: load from file or args
 
         // Load a random board with desired skill level
-        void loadBoard( int skillLevel);
+        void loadBoard( /*int skillLevel*/);
 
         // Load a bored stored in file
         void loadBoard( const char* fileName);
@@ -33,35 +33,30 @@ class CSuDokuBoard{
         // Displays all progress
         void printProgress();
 
-        // Print all possibilities for every cell ( or the one digit if solved )
-        void printAllPosibilities();
-
         // Extract values
         // ==================================================================================
 
         // Returns value, or - if 0. Used for printing the board
-        char getValue( const short shColumn, const short shRow);
+        char getValue( short shColumn, short shRow);
 
-        // Returns the entire board
-        Cell* GetBoard();
 
         // Validate
         // ==================================================================================
 
         // Does all the three above validations for supplied position
-        bool validateEverything( const vector2d &pos );
+        bool checkBoardValidity( const vector2d &pos );
 
          // Does all the three validations ( validateRow(), validateColumn(), validateSquare() for values 0-8 )
         bool validateEverything(  );
 
          // Validates an entire row ( left to right )
-        bool validateRow( const short shRow);
+        bool validateRow( short row);
 
         // Validates an entire colum ( top to bottom )
-        bool validateCoumn( const short shColumn);
+        bool validateCoumn( short col);
 
          // Validates an entire square
-        bool validateSquare(const short shColumn, const short shRow);
+        bool validateSquare(short col, short row);
 
         // Insert
         // ==================================================================================
@@ -69,33 +64,28 @@ class CSuDokuBoard{
         // Generic insert method
         bool insert(
                 const vector2d &pos, // Position to insert to
-                short shDigit,       // The digit to inser ( 1-9 )
-                bool bLocked = false // Lock position.
+                short digit,       // The digit to inser ( 1-9 )
+                bool lcoked = false // Lock position.
         );
+
+        bool checkMoveValidity ( const vector2d &pos, short digit );    	// Checks if move is valid
+
+        bool chekIfPositionIsLocked( const vector2d &pos );
 
         // Resets the board by erasing all digits that aren't locked.
         void resetBoard();
-
-        // Inserts and validates a single digit
-        bool insert_Validate( const vector2d &pos, const short iDigit);
-
-        // Inserts a locked digit
-        bool insert_Lock( const vector2d &pos, const short iDigit);
-
-
-        bool isValidMove ( const vector2d &pos, short shDigit );    	// Checks if move is valid
 
         // Validate
         // ==================================================================================
 
         // Check if row has the digit in one of its spaces
-        bool isDigitPlacedInRow( short shRow, short shDigit );
+        bool isDigitPlacedInRow( short row, short digit );
 
         // Check if column has the digit in one of its spaces
-        bool isDigitPlacedInColumn( short shColumn, short shDigit );
+        bool isDigitPlacedInColumn( short col, short digit );
 
         // Check if square has the digit in one of its spaces
-        bool isDigitPlacedInSquare(short shColumn, short shRow, short shDigit);
+        bool isDigitPlacedInSquare( const vector2d &pos, short digit);//pos.x / 3 , pos.y / 3
 
         // Progress
         // ==================================================================================
@@ -107,7 +97,7 @@ class CSuDokuBoard{
         short getProgressColumn(short shColumn);
 
          // Get numbers of digits filled out in square
-        short getProgressSquare(const short shColumn, const short shRow );
+        short getProgressSquare( const vector2d &pos );
 
         // Get numbers filled in of a particular digit
         short getProgressDigit(short shDigit);
@@ -121,6 +111,8 @@ class CSuDokuBoard{
         {
             return m_vUnsolvedPositions;
         }
+
+        void UpdateSolveInformation( const vector2d &pos );
 
     private:
         // Printing functions....
@@ -140,6 +132,7 @@ class CSuDokuBoard{
         bool lockPosition( const vector2d &pos );
 
         // Keeps track of all possible numbers for all positions
+        // TODO: move to solver
         Cell m_oPossibleNumbers[9][9];
 
         int m_iProgressRows[9];     // How many unsolved cells remains in row   ( used for quicker solving for rows   )
