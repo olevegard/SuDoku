@@ -1,12 +1,21 @@
 #include <cstring>
 
-#include "Board.h"
-
+//#include "Board.h"
+#include "SuDokuBoard.h"
 
 
 int main(int argc, char* argv[] )
 {
 
+    CSuDokuBoard brd;
+
+    if ( argc > 1 )
+    {
+        brd.loadBoard(argv[1]);
+        brd.printBoard();
+    }
+    //brd.insert()
+   /*
     CBoard oBoard;
 
     if ( argc > 1 )
@@ -83,6 +92,6 @@ int main(int argc, char* argv[] )
     oBoard.solveEverythingRepeat();
 
     //oBoard.printBoard();
-
+*/
     return 0;
 }

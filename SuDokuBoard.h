@@ -10,6 +10,7 @@
 
 class CSuDokuBoard{
     public:
+        CSuDokuBoard();
         // Initialisation
         // ==================================================================================
 
@@ -79,13 +80,13 @@ class CSuDokuBoard{
         // ==================================================================================
 
         // Check if row has the digit in one of its spaces
-        bool isDigitPlacedInRow( short row, short digit ) const;
+        bool isDigitPlacedInRow( short iRow, short iDigit ) const;
 
         // Check if column has the digit in one of its spaces
-        bool isDigitPlacedInColumn( short col, short digit ) const;
+        bool isDigitPlacedInColumn( short iColumn, short iDigit ) const;
 
         // Check if square has the digit in one of its spaces
-        bool isDigitPlacedInSquare( const vector2d &pos, short digit) const;//pos.x / 3 , pos.y / 3
+        bool isDigitPlacedInSquare( const vector2d &pos, short iDigit ) const;//pos.x / 3 , pos.y / 3
 
         // Progress
         // ==================================================================================
@@ -103,7 +104,7 @@ class CSuDokuBoard{
         short getTotatlProgress() const; // added
 
         // Returns value, or - if 0. Used for printing the board
-        short getValueOfPosition( const vector2d &opos ) const;// added
+         char getValueOfPosition( const vector2d &opos ) const;// added
 
         // Get a list of all unsolved positions
         const std::vector<vector2d>& getUnsolvedPositions() const;// added

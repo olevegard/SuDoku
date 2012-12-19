@@ -4,11 +4,32 @@
 #include <iomanip>
 
 static const bool PRINT_TIME    = true; 	// Prints time status during the end
-static const bool SPEED_ONLY    = true; 	// Disable checking features
+static const bool SPEED_ONLY    = false; 	// Disable checking features
 static const bool PRINT_INFO    = false;	// Name of function
 static const bool PRINT_BOARD   = false;	// Prints boards during inserts
-static const bool PRINT_DEBUG   = false;	// Main debugging option.
+static const bool PRINT_DEBUG   = true;	// Main debugging option.
 static const bool FREEZE        = false;	// Flag for calling std::cin.ignore()
+
+CSuDokuBoard::CSuDokuBoard()
+    :  m_iProgressRows     ( {0, 0, 0, 0, 0, 0, 0, 0, 0} )
+    ,  m_iProgressColumns  ( {0, 0, 0, 0, 0, 0, 0, 0, 0} )
+    ,  m_iProgressSquares  ( {0, 0, 0, 0, 0, 0, 0, 0, 0} )
+    ,  m_iUnsolvedPosCount ( 0 )
+    ,  m_vUnsolvedPositions( 0 )
+    ,  m_bGuessMode        ( false )
+{
+    for ( int i = 0; i < ( 9 * 9 ); ++i)
+    {
+        int iX = i % 9;
+        int iY = i / 9;
+
+        m_shBoard[iX][iY] = 0;
+        m_bLookedPositions[iX][iY] = false;
+
+        m_vUnsolvedPositions.push_back( vector2d(iX, iY));
+        m_iUnsolvedPosCount++;
+    }
+}
 
 //======================================================================================================
 //=========================================== Loading Boards ===========================================
@@ -281,19 +302,21 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool bLock )
         std::cout << "insert " << pos << " digit : " << digit << std::endl;
 
     // Need to know if the move is valid
-    if ( !checkMoveValidity( pos, digit ) )
-        return false;
-
     // Need to check if position is locked ( if something has been inserted into this position allready )
-    if ( chekIfPositionIsLocked(pos) )
+    if ( chekIfPositionIsLocked(pos) || !checkMoveValidity( pos, digit ) )
+    {
+        std::cin.ignore();
         return false;
+    }
 
     // Insert digit into board
     m_shBoard[pos.x][pos.y] = digit;
 
+    /*
     // Check row/column/square that intersects with this position for errors.
    if ( !checkBoardValidity(pos) )
-       return false;
+        bSucces = false;
+*/
 
     if ( bLock  || !m_bGuessMode)
     {
@@ -303,10 +326,6 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool bLock )
     // Update list of solved positions ( number of unsolved positions, solved in column/row/square )
     UpdateSolveInformation( pos );
 
-    // TODO; seperate function
-    // Freezes terminal so that ouput can be read.
-    if ( FREEZE )
-        std::cin.ignore();
 
     return true;
 }
@@ -355,7 +374,10 @@ bool CSuDokuBoard::checkMoveValidity ( const vector2d &pos, short iDigit ) const
     );
 
     if ( PRINT_DEBUG )
-        std::cout << "isValidMove " << iDigit << " into " << pos << " ? " << std::boolalpha << isValid;
+        std::cout << "isValidMove " << iDigit << " into " << pos << " ? " << std::boolalpha << isValid << std::endl;
+
+    if ( !isValid )
+        printBoard();
 
     return isValid;
 }
@@ -372,6 +394,8 @@ bool CSuDokuBoard::chekIfPositionIsLocked(const vector2d &pos) const
         std::cin.ignore();  // Since locks aren't implemented yet -> pause
         return true;
     }
+
+    return false;
 
 }
 
@@ -439,7 +463,6 @@ bool CSuDokuBoard::checkBoardValidity(  ) const
 
 bool CSuDokuBoard::checkRowValidity( short iRow ) const
 {
-
     vector2d matchLocation[9];
 
     bool bDigitValid[9] = {
@@ -558,7 +581,47 @@ bool CSuDokuBoard::checkColumnValidity( short iColumn ) const
     return true;
 }
 
+// Check if column has the digit in one of its spaces
+bool CSuDokuBoard::isDigitPlacedInColumn( short iColumn, short iDigit ) const
+{
+    for ( short i = 0; i < 9; ++i ) {
 
+        if ( m_shBoard[iColumn][i] == iDigit)
+            return true;
+    }
+
+    return false;
+}
+
+bool CSuDokuBoard::isDigitPlacedInRow( short iRow, short iDigit ) const
+{
+    for ( short i = 0; i < 9; ++i ) {
+
+        if ( m_shBoard[i][iRow] == iDigit)
+            return true;
+    }
+
+    return false;
+}
+
+// Check if square has the digit in one of its spaces
+bool CSuDokuBoard::isDigitPlacedInSquare( const vector2d &pos, short iDigit) const
+{
+    vector2d posOrigo = pos.GetOrigo();
+    short j = 0;
+
+    for ( short i = 0; i < 3; ++i ) {
+        for ( ; j < 3; j++ ) {
+
+            if ( m_shBoard[ posOrigo.x + i][posOrigo.y + j] == iDigit)
+                return true;
+        }
+
+        j = 0;
+    }
+
+    return false;
+}
 //=====================================================================================================
 //============================================== Progress =============================================
 //=====================================================================================================
@@ -612,11 +675,23 @@ short CSuDokuBoard::getTotatlProgress() const
     return ( 9 * 9 ) - m_iUnsolvedPosCount;
 }
 
-short CSuDokuBoard::getValueOfPosition( const vector2d &pos ) const
-{
-    return m_shBoard[pos.x][pos.y];
 
+char CSuDokuBoard::getValueOfPosition( const vector2d &pos ) const
+{
+    short iValue = m_shBoard[pos.x][pos.y];
+
+    if ( iValue > 0  )
+    {
+        // Return charter value of this digit
+        return 48 + iValue;
+    }
+    else
+        // No digit ( valid ) digit inserter, return -
+        return '-';
 }
+
+
+
 
 const std::vector<vector2d>& CSuDokuBoard::getUnsolvedPositions() const
 {
@@ -628,33 +703,32 @@ void CSuDokuBoard::printBoard( const vector2d &pos1, const vector2d &pos2) const
 {
     std::cout << "   =====================BOARD STATUS====================\n";
 
-    short j = 0;
+    vector2d currentPos(0,0);
 
-    for ( short i = 0; i < 9; ++i )
+    for ( ;currentPos.y < 9; ++ currentPos.y )
     {
 
         std::cout << "   || ";
 
-        for ( ; j < 9; j++)
+        for ( ; currentPos.x < 9; currentPos.x++)
         {
 
             // Add space between every three columns...
-            if ( j == 3 || j == 6)
+            if ( currentPos.x == 3 || currentPos.x == 6)
                 std::cout << "     ";
 
             // If ( i, j ) is the same as pos1 or pos2, surround this digit by |
             // Otherwise, use spaces
-            if ( ( j == pos1.x && i == pos1.y )
-                 || ( j == pos2.x && i == pos2.y ) )
-                std::cout << " |" << getValue( j, i) << "|";
+            if ( currentPos == pos1 || currentPos == pos2)
+                std::cout << " |" << getValueOfPosition( currentPos ) << "|";
             else
-                std::cout << "  " << getValue( j, i) << " ";
+                std::cout << "  " << getValueOfPosition( currentPos ) << " ";
         }
 
-        j = 0;
+        currentPos.x = 0;
 
         // And spacing lines between every three rows
-        if ( i == 2 || i == 5 )
+        if ( currentPos.y == 2 || currentPos.y == 5 )
             std::cout << "  ||\n\n\n";
         else
             std::cout << "  ||\n\n";
