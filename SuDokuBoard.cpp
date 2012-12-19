@@ -1,5 +1,7 @@
 #include "SuDokuBoard.h"
 #include <cstring>
+#include <algorithm>
+#include <iomanip>
 
 static const bool PRINT_TIME    = true; 	// Prints time status during the end
 static const bool SPEED_ONLY    = true; 	// Disable checking features
@@ -206,54 +208,54 @@ void CSuDokuBoard::loadBoard()
     */
 }
 
-void CSuDokuBoard::loadBoard( const char* board )
+void CSuDokuBoard::loadBoard( const char* czBoard )
 {
-    short length =  strlen( board );
+    short length =  strlen( czBoard );
     vector2d pos(0,0);
 
-    short shDigit = 0;
+    short iDigit = 0;
     for ( int i = 0; i < length; ++i)
     {
         // Convert current char to a digit
-        switch ( board[i] )
+        switch ( czBoard[i] )
         {
             case '1':
-                shDigit = 1;
+                iDigit = 1;
                 break;
             case '2':
-                shDigit = 2;
+                iDigit = 2;
                 break;
             case '3':
-                shDigit = 3;
+                iDigit = 3;
                 break;
             case '4':
-                shDigit = 4;
+                iDigit = 4;
                 break;
             case '5':
-                shDigit = 5;
+                iDigit = 5;
                 break;
             case '6':
-                shDigit = 6;
+                iDigit = 6;
                 break;
             case '7':
-                shDigit = 7;
+                iDigit = 7;
                 break;
             case '8':
-                shDigit = 8;
+                iDigit = 8;
                 break;
             case '9':
-                shDigit = 9;
+                iDigit = 9;
                 break;
             default:
-                shDigit = 0;
+                iDigit = 0;
                 break;
         }
 
         // Insert digit
-        if ( shDigit != 0 )
+        if ( iDigit != 0 )
         {
-            std::cout << "inserting " << shDigit << " at : " << pos << std::endl;
-            //insert( pos, shDigit, true );
+            std::cout << "inserting " << iDigit << " at : " << pos << std::endl;
+            insert( pos, iDigit, true );
         }
 
         // Increment x position of current digit
@@ -272,7 +274,7 @@ void CSuDokuBoard::loadBoard( const char* board )
 //======================================================================================================
 //============================================== Inserting =============================================
 //======================================================================================================
-bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool lock )
+bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool bLock )
 {
 
     if ( PRINT_INFO)
@@ -293,18 +295,13 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool lock )
    if ( !checkBoardValidity(pos) )
        return false;
 
-    if ( lock  || !m_bGuessMode)
+    if ( bLock  || !m_bGuessMode)
     {
         //lockPosition( pos );
     }
 
     // Update list of solved positions ( number of unsolved positions, solved in column/row/square )
     UpdateSolveInformation( pos );
-
-    // Need to remove digit from CellsS set pos as solved and set its value
-    // TODO: move to solver
-    m_oPossibleNumbers[pos.x][pos.y].bSolved = true;
-    m_oPossibleNumbers[pos.x][pos.y].set( digit - 1 );
 
     // TODO; seperate function
     // Freezes terminal so that ouput can be read.
@@ -318,7 +315,7 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool lock )
 //============================================================================================================
 void CSuDokuBoard::UpdateSolveInformation( const vector2d &pos)
 {
-    // Remove the possiblility ( it's not unsolved anymore ) and decrement the number of unsolved posititions
+
     removeFromListOfUnsolvedPositions(pos);
 
     ++m_iProgressColumns[pos.x];
@@ -331,86 +328,39 @@ void CSuDokuBoard::UpdateSolveInformation( const vector2d &pos)
 void CSuDokuBoard::removeFromListOfUnsolvedPositions( const vector2d &pos )
 {
 
-    int i = 0;
+    std::vector<vector2d>::iterator p;
 
-    // Todo: use std::find?
-    for ( ; i < m_iUnsolvedPosCount; ++i )
+    p = std::find( m_vUnsolvedPositions.begin(), m_vUnsolvedPositions.end(), pos );
+
+    if ( p != m_vUnsolvedPositions.end() )
     {
-        if ( m_vUnsolvedPositions[i].x == pos.x && m_vUnsolvedPositions[i].y == pos.y )
-        {
-            m_vUnsolvedPositions.erase( m_vUnsolvedPositions.begin() + i);
-            break;
-        }
-    }
+        m_vUnsolvedPositions.erase( p );
 
-    --m_iUnsolvedPosCount;
+        --m_iUnsolvedPosCount;
+    }
 
 }
 //==============================================================================================================
 //============================================== Validity checking =============================================
 //==============================================================================================================
-bool CSuDokuBoard::checkMoveValidity ( const vector2d &pos, short digit )
+bool CSuDokuBoard::checkMoveValidity ( const vector2d &pos, short iDigit ) const
 {
 
     if ( SPEED_ONLY )
-        return false;
+        return true;
+
+    bool isValid = ( !isDigitPlacedInColumn( pos.x, iDigit )
+         && !isDigitPlacedInRow( pos.y, iDigit )
+         && !isDigitPlacedInSquare( pos,  iDigit )
+    );
 
     if ( PRINT_DEBUG )
-        std::cout << "isValidMove " << digit << " into " << pos << " ?";
+        std::cout << "isValidMove " << iDigit << " into " << pos << " ? " << std::boolalpha << isValid;
 
-    if ( !isDigitPlacedInColumn( pos.x, digit )
-         && !isDigitPlacedInRow( pos.y, digit )
-         && !isDigitPlacedInSquare( pos,  digit ) )
-    {
-        if ( PRINT_DEBUG )
-            std::cout << " Yes!\n";
-
-        return true;
-    }
-
-    else
-    {
-        if ( PRINT_DEBUG )
-            std::cout << " No!\n";
-
-        return false;
-    }
+    return isValid;
 }
 
-bool CSuDokuBoard::checkBoardValidity(const vector2d &pos)
-{
-
-    if ( SPEED_ONLY )
-        return true;
-
-    bool valid = true;
-
-    if (!validateCoumn(pos.x))
-    {
-        std::cout << "Error found in column " << pos.x << std::endl;
-        valid = false;
-    }
-
-    if (!validateRow(pos.y))
-    {
-        std::cout << "Error found in row " << pos.y << std::endl;
-        valid = false;
-    }
-
-    if (!validateSquare( pos.x / 3, pos.y / 3))
-    {
-        std::cout << "Error found in square " << pos  << std::endl;
-        valid = false;
-    }
-
-    // Should be informed asap if something is not valid
-    if ( !valid )
-        std::cin.ignore();
-
-    return valid;
-}
-
-bool CSuDokuBoard::chekIfPositionIsLocked(const vector2d &pos)
+bool CSuDokuBoard::chekIfPositionIsLocked(const vector2d &pos) const
 {
     // Check if position is locekd.
     if ( SPEED_ONLY )
@@ -425,3 +375,295 @@ bool CSuDokuBoard::chekIfPositionIsLocked(const vector2d &pos)
 
 }
 
+bool CSuDokuBoard::checkBoardValidity(const vector2d &pos) const
+{
+
+    if ( SPEED_ONLY )
+        return true;
+
+    bool valid = true;
+
+    if (!checkColumnValidity( pos.x ) )
+    {
+        std::cout << "Error found in column " << pos.x << std::endl;
+        valid = false;
+    }
+
+    if (!checkRowValidity( pos.y ) )
+    {
+        std::cout << "Error found in row " << pos.y << std::endl;
+        valid = false;
+    }
+
+    if (!checkSquareValidity( pos ) )
+    {
+        std::cout << "Error found in square " << pos  << std::endl;
+        valid = false;
+    }
+
+    // Should be informed asap if something is not valid
+    if ( !valid )
+        std::cin.ignore();
+
+    return valid;
+}
+
+bool CSuDokuBoard::checkBoardValidity(  ) const
+{
+    bool bValid = true;
+
+    vector2d pos( 0, 0);
+    for ( short i = 0; i < 9; ++i )
+    {
+        if ( !checkRowValidity( i ) || !checkColumnValidity(i) || !checkSquareValidity(pos))
+            bValid = false;
+
+
+        // Increment pos
+        if ( pos.x == 6 )
+        {
+            pos.x = 0;
+            pos.y += 3;
+        } else
+            pos.x += 3;
+    }
+
+    // If something is wrong, it will have been printed once allready.
+    // But freezing should only be done once, hence it's done here
+    if ( !bValid )
+        std::cin.ignore();
+
+    return bValid;
+
+}
+
+bool CSuDokuBoard::checkRowValidity( short iRow ) const
+{
+
+    vector2d matchLocation[9];
+
+    bool bDigitValid[9] = {
+        false, false, false,
+        false, false, false,
+        false, false, false
+    };
+
+    for ( short i = 0; i < 9; ++i ) {
+
+        short iDigit = m_shBoard[i][iRow];
+
+        if ( iDigit > 0 ) {
+
+            if ( bDigitValid[ iDigit - 1] )
+            {
+                printBoard(vector2d(i, iRow), matchLocation[iDigit - 1]);
+
+                if ( PRINT_DEBUG )
+                        std::cout << "Error found in " << vector2d(i, iRow) << " and " << matchLocation[iDigit - 1] << " : " << iDigit << std::endl;
+
+                return false;
+            }
+
+            bDigitValid[ iDigit - 1] = true;
+            matchLocation[iDigit - 1].x = i;
+            matchLocation[iDigit - 1].y = iRow;
+
+        }
+    }
+
+    return true;
+}
+
+bool CSuDokuBoard::checkSquareValidity( const vector2d &pos ) const
+{
+    vector2d matchLocation[9];
+    vector2d origo = pos.GetOrigo();
+
+    bool bDigitValid[9] =
+    {
+        false, false, false,
+        false, false, false,
+        false, false, false
+    };
+
+    short j = 0;
+    for ( short i = 0; i < 3; ++i )
+    {
+        for ( ; j < 3; j++ )
+        {
+
+            short iDigit = m_shBoard[ pos.x * 3 + i][pos.y * 3 + j];
+
+            if ( iDigit > 0 )
+            {
+
+                if ( bDigitValid[ iDigit - 1] )
+                {
+                    printBoard( vector2d( origo.x + i, origo.y + j ), matchLocation[iDigit - 1]);
+
+                    if ( PRINT_DEBUG )
+                        std::cout << "Error found in " << vector2d( origo.x + i, origo.y + j ) << " and " << matchLocation[iDigit - 1] << " : " << iDigit << std::endl;
+
+                    return false;
+                }
+
+                bDigitValid[ iDigit - 1] = true;
+                matchLocation[iDigit - 1].x = (origo.x + i);
+                matchLocation[iDigit - 1].y = (origo.y + j);
+
+            }
+        }
+
+        j = 0;
+
+
+    }
+    return true;
+}
+
+bool CSuDokuBoard::checkColumnValidity( short iColumn ) const
+{
+    vector2d matchLocation[9];
+
+    bool bDigitValid[9] =
+    {
+        false, false, false,
+        false, false, false,
+        false, false, false
+    };
+
+    for ( short i = 0; i < 9; ++i )
+    {
+
+        short iDigit = m_shBoard[iColumn][i];
+
+        if ( iDigit > 0 ) {
+
+            if ( bDigitValid[ iDigit - 1] )
+            {
+                printBoard(vector2d(iColumn, i), matchLocation[iDigit - 1]);
+
+                if ( PRINT_DEBUG )
+                    std::cout << "Error found in " << vector2d(iColumn, i) << " and " << matchLocation[iDigit - 1] << " : " << iDigit << std::endl;
+
+                return false;
+            }
+
+            bDigitValid[ iDigit - 1] = true;
+            matchLocation[iDigit - 1].x = iColumn;
+            matchLocation[iDigit - 1].y = i;
+        }
+    }
+
+    return true;
+}
+
+
+//=====================================================================================================
+//============================================== Progress =============================================
+//=====================================================================================================
+short CSuDokuBoard::getProgressRow(short iRow) const
+{
+    short iNumbersFilledIn = 0;
+
+    for ( short i = 0; i < 9; ++i )
+    {
+        if ( m_shBoard[i][iRow] != 0)
+            iNumbersFilledIn++;
+    }
+
+    return iNumbersFilledIn;
+}
+
+short CSuDokuBoard::getProgressColumn(short iColumn) const
+{
+    short iNumbersFilledIn = 0;
+
+    for ( short i = 0; i < 9; ++i )
+    {
+        if ( m_shBoard[iColumn][i] != 0)
+            iNumbersFilledIn++;
+    }
+
+    return iNumbersFilledIn;
+}
+
+short CSuDokuBoard::getProgressSquare( const vector2d &pos ) const
+{
+    short iNumbersFilledIn = 0;
+    short j = 0;
+
+    for ( short i = 0; i < 3; ++i )
+    {
+        for ( ; j < 3; j++ )
+        {
+            if ( m_shBoard[ pos.x * 3 + i][pos.y * 3 + j] != 0)
+                iNumbersFilledIn++;
+        }
+
+        j = 0;
+    }
+
+    return iNumbersFilledIn;
+}
+
+short CSuDokuBoard::getTotatlProgress() const
+{
+    return ( 9 * 9 ) - m_iUnsolvedPosCount;
+}
+
+short CSuDokuBoard::getValueOfPosition( const vector2d &pos ) const
+{
+    return m_shBoard[pos.x][pos.y];
+
+}
+
+const std::vector<vector2d>& CSuDokuBoard::getUnsolvedPositions() const
+{
+    return m_vUnsolvedPositions;
+}
+
+
+void CSuDokuBoard::printBoard( const vector2d &pos1, const vector2d &pos2) const
+{
+    std::cout << "   =====================BOARD STATUS====================\n";
+
+    short j = 0;
+
+    for ( short i = 0; i < 9; ++i )
+    {
+
+        std::cout << "   || ";
+
+        for ( ; j < 9; j++)
+        {
+
+            // Add space between every three columns...
+            if ( j == 3 || j == 6)
+                std::cout << "     ";
+
+            // If ( i, j ) is the same as pos1 or pos2, surround this digit by |
+            // Otherwise, use spaces
+            if ( ( j == pos1.x && i == pos1.y )
+                 || ( j == pos2.x && i == pos2.y ) )
+                std::cout << " |" << getValue( j, i) << "|";
+            else
+                std::cout << "  " << getValue( j, i) << " ";
+        }
+
+        j = 0;
+
+        // And spacing lines between every three rows
+        if ( i == 2 || i == 5 )
+            std::cout << "  ||\n\n\n";
+        else
+            std::cout << "  ||\n\n";
+    }
+
+    std::cout << "   =====================================================\n";
+}
+
+void CSuDokuBoard::printBoard( ) const
+{
+    printBoard( vector2d(-1,-1), vector2d(-1,-1));
+}

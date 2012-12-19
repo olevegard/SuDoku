@@ -28,10 +28,18 @@ struct vector2d{
         return ( vec.x == this->x && vec.y == this->y );
     }
 
+    vector2d GetOrigo() const
+    {
+        // x and y is short, so x / 3 will never be a floating point number
+        // hence multiplying the reuslt with 3 will retun 0, 3 or 6
+        return vector2d( (x / 3 ) * 3 , (y / 3 ) * 3  );
+    }
+
     int x;
     int y;
 
 };
+
 
 inline std::ostream& operator<<(std::ostream& stream, const vector2d& pos)
 {
