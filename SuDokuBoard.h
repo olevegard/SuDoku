@@ -44,20 +44,17 @@ class CSuDokuBoard{
         // ==================================================================================
 
         // Does all the three above validations for supplied position
-        bool checkBoardValidity( const vector2d &pos ) const; // added
+        bool checkBoardValidity( const vector2d &pos ) const;
+        bool checkBoardValidity(  ) const;
 
-         // Does all the three validations ( validateRow(), validateColumn(), validateSquare() for values 0-8 )
-        bool checkBoardValidity(  ) const; // added
+        bool checkMoveValidity ( const vector2d &pos, short digit ) const;    // added	// Checks if move is valid
 
-         // Validates an entire row ( left to right )
-        bool checkRowValidity( short iRow) const;  // added
+        bool chekIfPositionIsLocked( const vector2d &pos ) const; // added
 
-        // Validates an entire colum ( top to bottom )
         // TODO : improve ( needs to check if a number is repeated )
-        bool checkColumnValidity( short iColumn) const;  // added
-
-         // Validates an entire square
-        bool checkSquareValidity(const vector2d &pos) const; // added needs testing
+        bool checkRowValidity( short iRow) const;
+        bool checkColumnValidity( short iColumn) const;
+        bool checkSquareValidity(const vector2d &pos) const; // needs testing
 
         // Insert
         // ==================================================================================
@@ -69,9 +66,7 @@ class CSuDokuBoard{
                 bool lcoked = false // Lock position.
         ); // added
 
-        bool checkMoveValidity ( const vector2d &pos, short digit ) const;    // added	// Checks if move is valid
 
-        bool chekIfPositionIsLocked( const vector2d &pos ) const; // added
 
         // Resets the board by erasing all digits that aren't locked.
         void resetBoard();
@@ -81,11 +76,7 @@ class CSuDokuBoard{
 
         // Check if row has the digit in one of its spaces
         bool isDigitPlacedInRow( short iRow, short iDigit ) const;
-
-        // Check if column has the digit in one of its spaces
         bool isDigitPlacedInColumn( short iColumn, short iDigit ) const;
-
-        // Check if square has the digit in one of its spaces
         bool isDigitPlacedInSquare( const vector2d &pos, short iDigit ) const;//pos.x / 3 , pos.y / 3
 
         // Progress
@@ -93,14 +84,9 @@ class CSuDokuBoard{
 
         // Get numbers of digits filled out in row
         short getProgressRow(short iRow) const; // added
-
-        // Get numbers of digits filled out in column
         short getProgressColumn(short iColumn) const;// added
-
-         // Get numbers of digits filled out in square
         short getProgressSquare( const vector2d &pos ) const;// added
 
-        // Get numbers of digits filled out in total
         short getTotatlProgress() const; // added
 
         // Returns value, or - if 0. Used for printing the board

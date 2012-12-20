@@ -18,6 +18,7 @@ Cell()
     {
     }
 
+/*
 // Compare two rows.
 // Returns true if hidden pair.
 bool operator==( const Cell &cell ){
@@ -39,7 +40,7 @@ bool operator==( const Cell &cell ){
 
     return (iCount == 2);
 }
-
+*/
 void set( short iDigit )
 {
     // Remove all digits and decrement count possible
@@ -93,14 +94,7 @@ short solve(){
         return 0;
 
 }
-// Returns true if shDigit is possible in this Cell and in the argument cell.
-// Returns false otherwise
-bool isPairingPossibleDigit ( const Cell &cell, const short shDigit ) {
-    if ( m_bPossibleNumbers[shDigit] && cell.m_bPossibleNumbers[shDigit] )
-        return true;
-    else
-        return false;
-}
+
 
 short countPossibleOfPair( const short shDigit1, const short shDigit2)
 {
@@ -117,6 +111,7 @@ short countPossibleOfPair( const short shDigit1, const short shDigit2)
 
     return shCount;
 }
+
 void removeAllExceptPair ( const short shDigit1, const short shDigit2 )
 {
     for ( short shCurrentDigit = 1; shCurrentDigit < 9; ++shCurrentDigit )
@@ -129,24 +124,6 @@ void removeAllExceptPair ( const short shDigit1, const short shDigit2 )
     }
 }
 
-/*
-bool isPossibleTriplet( const short shCellNr )
-{
-    short shCount = 0;
-
-    for ( short sh = 0; sh < 9; ++sh )
-    {
-        if ( m_bPossibleNumbers[sh] )
-            ++shCount;
-
-        if ( shCount < 3 )
-            return true;
-
-    }
-
-    return ( shCount > 0 && shCount <= 3 );
-
-}*/
 bool isNakedPair( const Cell &cell )
 {
     short shCountPossible = 0;
@@ -182,6 +159,7 @@ void resetHiddenDouble()
     shHiddenDouble2 = -1;
     shHiddenDouble3 = -1;
 }
+/*
 bool isPossiblePair( const Cell &cell )
 {
     if ( bSolved || cell.bSolved)
@@ -207,22 +185,16 @@ bool isPossiblePair( const Cell &cell )
     }
 
     return ( shCountPossible == 2 );
-}
-
+}*/
 bool isPossible( short shDigit ) const
-{
-    return m_bPossibleNumbers[ shDigit];
-}
-
-inline bool operator[](const short shDigit )
 {
     return m_bPossibleNumbers[shDigit];
 }
+
 short getSolvedDigitP1()
 {
     return shDigit + 1;
 }
-
 std::string print( ) const
 {
     std::stringstream stream;
@@ -500,104 +472,5 @@ inline bool isNakedTriplets( Cell &cell1, Cell &cell2, Cell &cell3  )
 	}	
 
 	return true;
-/*
-	if (       shHiddenDouble2 == cell1.shHiddenDouble1
-		|| shHiddenDouble2 == cell1.shHiddenDouble2
-		|| shHiddenDouble2 == cell1.shHiddenDouble3
-	)
-		
-	if (       shHiddenDouble3 == cell1.shHiddenDouble1
-		|| shHiddenDouble3 == cell1.shHiddenDouble2
-		|| shHiddenDouble3 == cell1.shHiddenDouble3
-	)
-		bTriplet = true;
 
-	if ( !bTriplet ) 
-		return false;
-
-	// Cell 1 pair in cell 3
-	bTriplet = false;
-	
-	if (       shHiddenDouble1 == cell2.shHiddenDouble1
-		|| shHiddenDouble1 == cell2.shHiddenDouble2
-		|| shHiddenDouble1 == cell2.shHiddenDouble3
-	)
-		bTriplet = true;
-
-	if (       shHiddenDouble2 == cell2.shHiddenDouble1
-		|| shHiddenDouble2 == cell2.shHiddenDouble2
-		|| shHiddenDouble2 == cell2.shHiddenDouble3
-	)
-		
-	if (       shHiddenDouble3 == cell2.shHiddenDouble1
-		|| shHiddenDouble3 == cell2.shHiddenDouble2
-		|| shHiddenDouble3 == cell2.shHiddenDouble3
-	)
-		bTriplet = true;
-
-	if ( !bTriplet ) 
-		return false;
-
-	// Cell 2 pair in cell 3
-	bTriplet = false;
-	
-	if (       cell1.shHiddenDouble1 == cell2.shHiddenDouble1
-		|| cell1.shHiddenDouble1 == cell2.shHiddenDouble2
-		|| cell1.shHiddenDouble1 == cell2.shHiddenDouble3
-	)
-		bTriplet = true;
-
-	if (       cell1.shHiddenDouble2 == cell2.shHiddenDouble1
-		|| cell1.shHiddenDouble2 == cell2.shHiddenDouble2
-		|| cell1.shHiddenDouble2 == cell2.shHiddenDouble3
-	)
-		
-	if (       cell1.shHiddenDouble3 == cell2.shHiddenDouble1
-		|| cell1.shHiddenDouble3 == cell2.shHiddenDouble2
-		|| cell1.shHiddenDouble3 == cell2.shHiddenDouble3
-	)
-		bTriplet = true;
-
-	if ( !bTriplet ) 
-		return false;
-	
-	return true;
-*
-	// Check if shHiddenDouble1 exists in cell 2
-	if (  shHiddenDouble1 == cell1.shHiddenDouble1 && shHiddenDouble1 > 0)
-		std::cout << "found in cell 1 and 2 : " << shHiddenDouble1 + 1 << " = " << cell1.shHiddenDouble1 + 1 << std::endl;
-	if (  shHiddenDouble1 == cell1.shHiddenDouble2 && shHiddenDouble1 > 0)
-		std::cout << "found in cell 1 and 2 : " << shHiddenDouble1 + 1 << " = " << cell1.shHiddenDouble2 + 1 << std::endl;
-	if (  shHiddenDouble1 == cell1.shHiddenDouble3 && shHiddenDouble1 > 0)
-		std::cout << "found in cell 1 and 2 : " << shHiddenDouble1 + 1 << " = " << cell1.shHiddenDouble3 + 1 << std::endl;
-
-	// Check if shHiddenDouble1 exists in cell 3
-	if (  shHiddenDouble1 == cell2.shHiddenDouble1 && shHiddenDouble1 > 0)
-		std::cout << "found in cell 1 and 3 : " << shHiddenDouble1 + 1 << " = " << cell2.shHiddenDouble1 + 1 << std::endl;
-	if (  shHiddenDouble1 == cell2.shHiddenDouble2 && shHiddenDouble1 > 0)
-		std::cout << "found in cell 1 and 3 : " << shHiddenDouble1 + 1 << " = " << cell2.shHiddenDouble2 + 1 << std::endl;
-	if (  shHiddenDouble1 == cell2.shHiddenDouble3 && shHiddenDouble1 > 0)
-		std::cout << "found in cell 1 and 3 : " << shHiddenDouble1 + 1 << " = " << cell2.shHiddenDouble3 + 1 << std::endl;
-
-	// Check if shHiddenDouble2 exists in cell 2
-	if (  shHiddenDouble2 == cell1.shHiddenDouble1 && shHiddenDouble2 > 0)
-		std::cout << "found in cell 1 and 2 : " << shHiddenDouble2 + 1 << " = " << cell1.shHiddenDouble1 + 1 << std::endl;
-	if (  shHiddenDouble2 == cell1.shHiddenDouble2 && shHiddenDouble2 > 0)
-		std::cout << "found in cell 1 and 2 : " << shHiddenDouble2 + 1 << " = " << cell1.shHiddenDouble2 + 1 << std::endl;
-	if (  shHiddenDouble2 == cell1.shHiddenDouble3 && shHiddenDouble2 > 0)
-		std::cout << "found in cell 1 and 2 : " << shHiddenDouble2 + 1 << " = " << cell1.shHiddenDouble3 + 1 << std::endl;
-
-	// Check if shHiddenDouble2 exists in cell 3
-	if (  shHiddenDouble2 == cell2.shHiddenDouble1 && shHiddenDouble2 > 0)
-		std::cout << "found in cell 1 and 3 : " << shHiddenDouble2 + 1 << " = " << cell2.shHiddenDouble1 + 1 << std::endl;
-	if (  shHiddenDouble2 == cell2.shHiddenDouble2 && shHiddenDouble2 > 0)
-		std::cout << "found in cell 1 and 3 : " << shHiddenDouble2 + 1 << " = " << cell2.shHiddenDouble2 + 1 << std::endl;
-	if (  shHiddenDouble2 == cell2.shHiddenDouble3 && shHiddenDouble2 > 0)
-		std::cout << "found in cell 1 and 3 : " << shHiddenDouble2 + 1 << " = " << cell2.shHiddenDouble3 + 1 << std::endl;
-
-	return
-		(  ( shHiddenDouble1 == cell1.shHiddenDouble1 ) && ( shHiddenDouble1 == cell2.shHiddenDouble1 )
-		&& ( shHiddenDouble2 == cell1.shHiddenDouble2 ) && ( shHiddenDouble2 == cell2.shHiddenDouble2 )
-		&& ( shHiddenDouble3 == cell1.shHiddenDouble3 ) && ( shHiddenDouble3 == cell2.shHiddenDouble3 )
-	); **/
 }

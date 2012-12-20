@@ -581,7 +581,6 @@ bool CSuDokuBoard::checkColumnValidity( short iColumn ) const
     return true;
 }
 
-// Check if column has the digit in one of its spaces
 bool CSuDokuBoard::isDigitPlacedInColumn( short iColumn, short iDigit ) const
 {
     for ( short i = 0; i < 9; ++i ) {
@@ -604,7 +603,6 @@ bool CSuDokuBoard::isDigitPlacedInRow( short iRow, short iDigit ) const
     return false;
 }
 
-// Check if square has the digit in one of its spaces
 bool CSuDokuBoard::isDigitPlacedInSquare( const vector2d &pos, short iDigit) const
 {
     vector2d posOrigo = pos.GetOrigo();
