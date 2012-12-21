@@ -6,87 +6,97 @@
 struct CSuDokuCell
 {
 CSuDokuCell()
-    : bSolved(false)
+	: m_bSolved(false)
 
+	, m_iHiddenDouble1(0)
+	, m_iHiddenDouble2(0)
+	, m_iHiddenDouble3(0)
 
-    , shHiddenDouble1(0)
-    , shHiddenDouble2(0)
-    , shHiddenDouble3(0)
-
-    , m_shCountPossible(9)
-    , shDigit(0)
-    , m_bPossibleNumbers({true,true,true,true,true,true,true,true,true})
-    {
-    }
+	, m_iCountPossible(9)
+	, m_iDigit(0)
+	, m_bPossibleNumbers({true,true,true,true,true,true,true,true,true})
+{
+}
 
 
     // Sets the digit and marks as solved
-    void setAndMarkAsSolved( short iDigit );
-    void addPossibleDigit( const short shDigit );
-    bool removePossibleDigit( const short shDigit );
+	void setAndMarkAsSolved( short iDigit );
+	void addPossibleDigit( const short shDigit );
+	bool removePossibleDigit( const short shDigit );
 
-    short tryToSolveCell();
+	short tryToSolveCell();
 
-    void removeAllExceptPair ( const short shDigit1, const short shDigit2 );
+	void removeAllExceptPair ( const short shDigit1, const short shDigit2 );
+
+	void resetHiddenDouble();
 
 
-    void resetHiddenDouble();
+	// Gets
+	short isPossible( const short shDigit1, const short shDigit2 ) const;
+	bool isPossible( short shDigit ) const;
+	bool isSolved() const;
+	short getSolvedDigitP1() const;
+	std::string print( ) const;
 
+	short getHiddenDouble1() const
+	{
+		return m_iHiddenDouble1;
+	}
 
-    // Gets
-    short isPossible( const short shDigit1, const short shDigit2 ) const;
-    bool isPossible( short shDigit ) const;
-    bool isSolved() const;
-    short getSolvedDigitP1() const;
-    std::string print( ) const;
+	short getHiddenDouble2() const
+	{
+		return m_iHiddenDouble2;
+	}
 
-    short getHiddenDouble1() const
-    {
-        return shHiddenDouble1;
-    }
+	short getHiddenDouble3() const
+	{
+		return m_iHiddenDouble3;
+	}
 
-    short getHiddenDouble2() const
-    {
-        return shHiddenDouble2;
-    }
+	void setHiddenDouble1( short iDigit )
+	{
+		m_iHiddenDouble1 = iDigit;
+	}
 
-    short getHiddenDouble3() const
-    {
-        return shHiddenDouble3;
-    }
+	void setHiddenDouble2( short iDigit )
+	{
+		m_iHiddenDouble2 = iDigit;
+	}
 
-    void setHiddenDouble1( short iDigit )
-    {
-        shHiddenDouble1 = iDigit;
-    }
+	void setHiddenDouble3( short iDigit )
+	{
+		m_iHiddenDouble3 = iDigit;
+	}
 
-    void setHiddenDouble2( short iDigit )
-    {
-        shHiddenDouble2 = iDigit;
-    }
+	short getCountPossible()
+	{
+		return m_iCountPossible;
+	}
 
-    void setHiddenDouble3( short iDigit )
-    {
-        shHiddenDouble3 = iDigit;
-    }
+	short checkIsHiddenDouble( short iPossibleDouble ) const
+	{
+		return ( iPossibleDouble == m_iHiddenDouble1
+			|| iPossibleDouble == m_iHiddenDouble2
+			|| iPossibleDouble == m_iHiddenDouble3 );
+	}
 
-    short getCountPossible()
-    {
-        return m_shCountPossible;
-    }
+	short getCountPossible() const
+	{
+		return m_iCountPossible;
+	}
 
 // Variables
 private:
-    bool bSolved;
+	bool m_bSolved;
 
-    short shHiddenDouble1;
-    short shHiddenDouble2;
-    short shHiddenDouble3;
+	short m_iHiddenDouble1;
+	short m_iHiddenDouble2;
+	short m_iHiddenDouble3;
 
-    short m_shCountPossible;
+	short m_iCountPossible;
 
-    short shDigit;
-    bool m_bPossibleNumbers[9];
+	short m_iDigit;
+	bool m_bPossibleNumbers[9];
 };// End of Cell struct...
 
 
@@ -254,43 +264,54 @@ inline bool isNakedTriplets( CSuDokuCell &cell1, CSuDokuCell &cell2, CSuDokuCell
 
     if ( iCountUnique > 3 )
         return false;
-
-
-
 }
-bool CompareHiddehDoubles_3( /*const CSodukCell &cell1, const CSuDokuCell &cell2, const CSuDokuCell &cell3 */)
+
+bool compareHelper( const CSuDokuCell &cell, const CSuDokuCell &cell2, const CSuDokuCell &cell3  )
 {
+	short iHitsInCell2 = 0;
+	short iHitsInCell3 = 0;
 
-    /* TODO malke this into a generic function!
-    if (
-           iCell1Double1 != cell2.shHiddenDouble1
-        && iCell1Double1 != cell2.shHiddenDouble2
-        && iCell1Double1 != cell2.shHiddenDouble3
-        && iCell1Double1 != cell3.shHiddenDouble1
-        && iCell1Double1 != cell3.shHiddenDouble2
-        && iCell1Double1 != cell3.shHiddenDouble3
+	short iCell1Double1 =  cell.getHiddenDouble1();
 
-    )
-        return false;
+	if ( cell2.checkIsHiddenDouble( iCell1Double1 ) )
+		++iHitsInCell2;
 
+	if ( cell3.checkIsHiddenDouble( iCell1Double1 ) )
+		++iHitsInCell3;
 
-      */
+	short iCell1Double2 = cell.getHiddenDouble2();
 
-    /*
-    short iCell1Double1 = cell1.getHiddenDouble1();
-    short iCell1Double2 = cell1.getHiddenDouble2();
-    short iCell1Double3 = cell1.getHiddenDouble3();
+	if ( cell2.checkIsHiddenDouble( iCell1Double2 ) )
+		++iHitsInCell2;
 
-    short iCell2Double1 = cell2.getHiddenDouble1();
-    short iCell2Double2 = cell2.getHiddenDouble2();
-    short iCell2Double3 = cell2.getHiddenDouble3();
+	if ( cell3.checkIsHiddenDouble( iCell1Double2 ) )
+		++iHitsInCell3;
 
-    short iCell3Double1 = cell3.getHiddenDouble1();
-    short iCell3Double2 = cell3.getHiddenDouble2();
-    short iCell3Double3 = cell3.getHiddenDouble3();
-*/
+	if ( cell.getCountPossible() > 2 ) 
+	{
 
-    /*
+		short iCell1Double3 = cell.getHiddenDouble3();
+
+		if ( cell2.checkIsHiddenDouble( iCell1Double3 ) )
+			++iHitsInCell2;
+
+		if ( cell3.checkIsHiddenDouble( iCell1Double3 ) )
+			++iHitsInCell3;
+
+		return ( iHitsInCell2 > 0 && iHitsInCell3 > 0 ) && iHitsInCell2 + iHitsInCell3 == 3;
+	} else
+		return ( iHitsInCell2 > 0 && iHitsInCell3 > 0 );
+}
+
+bool CompareHiddehDoubles_3( const CSuDokuCell &cell1, const CSuDokuCell &cell2, const CSuDokuCell &cell3 )
+{
+	bool b = true;
+	b = compareHelper( cell1, cell2, cell3 );
+
+	return b;
+
+/*l
+    // TODO malke this into a generic function!
     // Print all possible numbers
     if ( false )
         std::cout

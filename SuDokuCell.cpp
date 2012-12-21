@@ -3,128 +3,126 @@
 
 void CSuDokuCell::setAndMarkAsSolved( short iDigit )
 {
-    // Remove all digits and decrement count possible
-    for ( short i = 0; i < 9; ++i )
-    {
-        removePossibleDigit(i);
-    }
+	// Remove all digits and decrement count possible
+	for ( short i = 0; i < 9; ++i )
+	{
+		removePossibleDigit(i);
+	}
 
-    bSolved = true;
-    shDigit = iDigit + 1;
+	m_bSolved = true;
+	m_iDigit = iDigit + 1;
 
 }
 
-void  CSuDokuCell::addPossibleDigit( const short shDigit )
+void  CSuDokuCell::addPossibleDigit( const short iDigit )
 {
-    m_bPossibleNumbers[shDigit - 1] = true;
-    ++m_shCountPossible;
+	m_bPossibleNumbers[ iDigit - 1] = true;
+	++m_iCountPossible;
 }
 
-bool  CSuDokuCell::removePossibleDigit( const short shDigit )
+bool  CSuDokuCell::removePossibleDigit( const short iDigit )
 {
-    bool bRemoved = m_bPossibleNumbers[shDigit];
-    m_bPossibleNumbers[shDigit] = false;
+	bool bRemoved = m_bPossibleNumbers[iDigit];
+	m_bPossibleNumbers[iDigit] = false;
 
-    if ( bRemoved )
-        --m_shCountPossible;
+	if ( bRemoved )
+		--m_iCountPossible;
 
-    return bRemoved;
+	return bRemoved;
 }
 
 short  CSuDokuCell::tryToSolveCell()
 {
-    int iCount = 0;
-    int iLast = 0;
+	int iCount = 0;
+	int iLast = 0;
 
-    for ( int i = 0; i < 9; ++i )
-    {
+	for ( int i = 0; i < 9; ++i )
+	{
 
-        if ( m_bPossibleNumbers[i]  )
-        {
-            ++iCount;
-            if ( iLast == 0)
-                iLast = i;
+		if ( m_bPossibleNumbers[i]  )
+		{
+			++iCount;
+			if ( iLast == 0)
+				iLast = i;
+		}
 
-        }
+	}
 
-    }
-
-    if ( iCount == 1) {
-        m_bPossibleNumbers[iLast] = false;
-        shDigit = ++iLast;
-        bSolved = true;
-        return iLast;
-    } else
-        return 0;
+	if ( iCount == 1) {
+		m_bPossibleNumbers[iLast] = false;
+		m_iDigit = ++iLast;
+		m_bSolved = true;
+		return iLast;
+	} else
+		return 0;
 }
-
-
-
-
-void  CSuDokuCell::removeAllExceptPair ( const short shDigit1, const short shDigit2 )
+void  CSuDokuCell::removeAllExceptPair ( const short iDigit1, const short iDigit2 )
 {
-    for ( short shCurrentDigit = 1; shCurrentDigit < 9; ++shCurrentDigit )
-    {
-        if ( shCurrentDigit == shDigit1 || shCurrentDigit == shDigit2 )
-            continue;
+	for ( short iCurrentDigit = 1; iCurrentDigit < 9; ++iCurrentDigit )
+	{
+		if ( iCurrentDigit == iDigit1 || iCurrentDigit == iDigit2 )
+			continue;
 
-        m_bPossibleNumbers[shCurrentDigit - 1] = false;
+		m_bPossibleNumbers[iCurrentDigit - 1] = false;
 
-    }
+	}
 }
 
 void  CSuDokuCell::resetHiddenDouble()
 {
-    shHiddenDouble1 = -1;
-    shHiddenDouble2 = -1;
-    shHiddenDouble3 = -1;
+	m_iHiddenDouble1 = -1;
+	m_iHiddenDouble2 = -1;
+	m_iHiddenDouble3 = -1;
 }
 
 
-bool  CSuDokuCell::isPossible( short shDigit ) const
+bool  CSuDokuCell::isPossible( short iDigit ) const
 {
-    return m_bPossibleNumbers[shDigit];
+	return m_bPossibleNumbers[iDigit];
 }
 
-short CSuDokuCell::isPossible( const short shDigit1, const short shDigit2 ) const
+short CSuDokuCell::isPossible( const short iDigit1, const short iDigit2 ) const
 {
-    if ( bSolved )
-        return 0;
+	if ( m_bSolved )
+		return 0;
 
-    short shCount = 0;
+	short iCount = 0;
 
-    if ( m_bPossibleNumbers[shDigit1] )
-        ++shCount;
+	if ( m_bPossibleNumbers[iDigit1] )
+		++iCount;
 
-    if ( m_bPossibleNumbers[shDigit2] )
-        ++shCount;
+	if ( m_bPossibleNumbers[iDigit2] )
+		++iCount;
 
-    return shCount;
+	return iCount;
 }
 
 bool CSuDokuCell::isSolved() const
 {
-    return bSolved;
+	return m_bSolved;
 }
 short  CSuDokuCell::getSolvedDigitP1() const
 {
-    return shDigit + 1;
+	return m_iDigit + 1;
 }
 
 std::string  CSuDokuCell::print( ) const
 {
-    std::stringstream stream;
-    if ( bSolved )
-        stream << " - Solved : " << shDigit;
-    else {
-        stream << " - Unsolved : ";
+	std::stringstream stream;
+	if ( m_bSolved )
+		stream << " - Solved : " << m_iDigit;
+	else
+	{
+		stream << " - Unsolved : ";
 
-        for ( short i = 0; i < 9; ++i ) {
-            if ( isPossible(i) )
-                stream << " " << ( i + 1);
-        }
+		for ( short i = 0; i < 9; ++i )
+		{
+			if ( isPossible(i) )
+				stream << " " << ( i + 1);
+		}
 
-        stream << " possible : " << m_shCountPossible;
-    }
-    return stream.str();
+		stream << " possible : " << m_iCountPossible;
+	}
+
+	return stream.str();
 }
