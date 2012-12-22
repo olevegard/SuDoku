@@ -3,9 +3,6 @@
 #include <ostream>
 #include <iostream>
 #include <sys/time.h>
-
-#include "Box.h"
-#include "Cell.h"
 #include "Vector2d.h"
 
 class CSuDokuBoard{
@@ -14,16 +11,6 @@ class CSuDokuBoard{
         // Initialisation
         // ==================================================================================
 
-        // Loads the board TODO: load from file or args
-
-        // Load a random board with desired skill level
-        void loadBoard( /*int skillLevel*/); // not implemented yet
-
-        // Load a bored stored in file
-        void loadBoard( const char* fileName); // not implemented yet
-
-        // Load a board from cmd line ( only implemented way )
-        void loadBoard( const char* board[] ); // added
 
         // Printing
         // ==================================================================================

@@ -1,19 +1,20 @@
 #include <cstring>
 
 //#include "Board.h"
-#include "SuDokuBoard.h"
-
+//#include "BoardManager.h"
 
 int main(int argc, char* argv[] )
 {
 
-    CSuDokuBoard brd;
+    //CBoardManager brdMan;
 
-    if ( argc > 1 )
-    {
-        brd.loadBoard(argv[1]);
-        brd.printBoard();
-    }
+    if ( argc > 1 && argv[0] )
+	{
+        //brdMan.loadBoard(argv[1]);
+        //brd.printBoard();
+	}
+
+
     //brd.insert()
    /*
     CBoard oBoard;
