@@ -44,6 +44,7 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool bLock )
     // Need to check if position is locked ( if something has been inserted into this position allready )
     if ( chekIfPositionIsLocked(pos) || !checkMoveValidity( pos, digit ) )
     {
+        std::cout << "ERROR INSERTING " << digit << " at : " << pos << std::endl;
         std::cin.ignore();
         return false;
     }
@@ -116,7 +117,7 @@ bool CSuDokuBoard::checkMoveValidity ( const vector2d &pos, short iDigit ) const
         std::cout << "isValidMove " << iDigit << " into " << pos << " ? " << std::boolalpha << isValid << std::endl;
 
     if ( !isValid )
-        printBoard();
+        printBoard(pos, vector2d(-1,-1));
 
     return isValid;
 }

@@ -24,6 +24,15 @@ CSuDokuCell()
 }
 
 
+    bool remove( const short shDigit ) {
+        bool bRemoved = m_bPossibleNumbers[shDigit];
+        m_bPossibleNumbers[shDigit] = false;
+
+        if ( bRemoved )
+            --m_iCountPossible;
+
+        return bRemoved;
+    }
     // Sets the digit and marks as solved
 	void setAndMarkAsSolved( short iDigit );
 	void addPossibleDigit( const short shDigit );

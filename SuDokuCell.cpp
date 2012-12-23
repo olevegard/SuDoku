@@ -11,7 +11,7 @@ namespace SuDokuCell
         }
 
         m_bSolved = true;
-        m_iDigit = iDigit + 1;
+        m_iDigit = iDigit;// + 1;
 
     }
 
@@ -128,7 +128,7 @@ namespace SuDokuCell
         return stream.str();
     }
 
-    // opeator << defined outside of namespace as it should be
+    // opeator << defined as a non-member function as it shouold be
     inline std::ostream& operator<<(std::ostream& stream, const CSuDokuCell& cell)
     {
         stream << cell.print();
@@ -165,6 +165,15 @@ namespace SuDokuCell
 
         return ( shCountPossible == 2 );
     }
+    // Returns true if shDigit is possible in this Cell and in the argument cell.
+    // Returns false otherwise
+    bool isPairingPossibleDigit ( const CSuDokuCell &cell1, const CSuDokuCell &cell2, const short shDigit ) {
+        if ( cell1.isPossible( shDigit ) && cell2.isPossible( shDigit ) )
+            return true;
+        else
+            return false;
+    }
+
     inline bool isNakedTriplets( CSuDokuCell &cell1, CSuDokuCell &cell2, CSuDokuCell &cell3  )
     {
         if ( false )
@@ -425,7 +434,7 @@ namespace SuDokuCell
                 && cell2.shHiddenDouble3 != cell1.shHiddenDouble2
                 && cell2.shHiddenDouble3 != cell1.shHiddenDouble3
                 && cell2.shHiddenDouble3 != cell3.shHiddenDouble1
-                && cell2.shHiddenDouble3 != cell3.shHiddenDouble2
+                && cell2.shitHiddenDouble3 != cell3.shHiddenDouble2
                 && cell2.shHiddenDouble3 != cell3.shHiddenDouble3
 
             )
@@ -472,12 +481,5 @@ namespace SuDokuCell
         return true;
     }
 
-    // Returns true if shDigit is possible in this Cell and in the argument cell.
-    // Returns false otherwise
-    bool isPairingPossibleDigit ( const CSuDokuCell &cell1, const CSuDokuCell &cell2, const short shDigit ) {
-        if ( cell1.isPossible( shDigit ) && cell2.isPossible( shDigit ) )
-            return true;
-        else
-            return false;
-    }
+
 }

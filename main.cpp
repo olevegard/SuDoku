@@ -1,16 +1,17 @@
 #include <cstring>
 
 //#include "Board.h"
-//#include "BoardManager.h"
+#include "BoardManager.h"
 
 int main(int argc, char* argv[] )
 {
 
-    //CBoardManager brdMan;
+    CBoardManager brdMan;
 
+    std::cout << "loading...\n";
     if ( argc > 1 && argv[0] )
 	{
-        //brdMan.loadBoard(argv[1]);
+        brdMan.loadBoard(argv[1]);
         //brd.printBoard();
 	}
 
