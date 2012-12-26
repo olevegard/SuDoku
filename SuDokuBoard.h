@@ -80,35 +80,21 @@ class CSuDokuBoard{
          char getValueOfPosition( const vector2d &opos ) const;// added
 
         // Get a list of all unsolved positions
-        const std::vector<vector2d>& getUnsolvedPositions() const;// added
-
-        void UpdateSolveInformation( const vector2d &pos );// added
+        //const std::vector<vector2d>& getUnsolvedPositions() const;// added
 
     private:
 
 
         // Removes a digit from m_vUnsolvedPositions
-        void removeFromListOfUnsolvedPositions( const vector2d &pos ); // added
+        //void removeFromListOfUnsolvedPositions( const vector2d &pos ); // added
 
         // Locks a position ( "hey man, trust me, I know this digit goes there" )
         // A locked position can't be changed, and won't be reset by reset board.
         // This should be done as much as possible
         bool lockPosition( const vector2d &pos );
 
-        // Arrays storiing progress for row/column/squares
-        // Used for optimization purposes
-        int m_iProgressRows[9];
-        int m_iProgressColumns[9];
-        int m_iProgressSquares[9];
-
         // The SuDoku board
        short m_shBoard[9][9];
-
-       // The number of unsolved positions.
-       int m_iUnsolvedPosCount;
-
-       // All unsolved positions
-       std::vector<vector2d> m_vUnsolvedPositions;
 
         // Which positions can be changed?
         bool m_bLookedPositions[9][9];

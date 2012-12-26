@@ -1,7 +1,9 @@
 #pragma once
 
-#include "SuDokuCell.h"
+
 #include "SuDokuBoard.h"
+#include "SuDokuSolver.h"
+//#include "BoardStatus.h"
 
 
 class CBoardManager{
@@ -10,7 +12,7 @@ class CBoardManager{
 public:
     CBoardManager()
         :   m_oBoard()
-        ,   m_oPossibleNumbers()
+        ,   m_oSolver()
     {
 
     }
@@ -29,19 +31,16 @@ public:
     // Load a board from cmd line
     void loadBoard( const char* board );
 
+    void solveNext( );
+
 
 
 
 private:
 
-    // Removes a digit from m_oPossibleNumbers
-    void removePossibilitiesInsert( const vector2d &pos, const short shDigit );
-
-    void printAllPosibilities();
-
     void insert( const vector2d &pos, short iDigit );
     CSuDokuBoard m_oBoard;
+    CSuDokuSolver m_oSolver;
+    //BoardStatus m_oStatus;
 
-    // Keeps track of all possible numbers for all positions
-   SuDokuCell::CSuDokuCell m_oPossibleNumbers[9][9];
 };

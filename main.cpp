@@ -12,6 +12,7 @@ int main(int argc, char* argv[] )
     if ( argc > 1 && argv[0] )
 	{
         brdMan.loadBoard(argv[1]);
+        brdMan.solveNext();
         //brd.printBoard();
 	}
 

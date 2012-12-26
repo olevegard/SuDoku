@@ -11,12 +11,8 @@ static const bool PRINT_DEBUG   = true;	// Main debugging option.
 static const bool FREEZE        = false;	// Flag for calling std::cin.ignore()
 
 CSuDokuBoard::CSuDokuBoard()
-    :  m_iProgressRows     ( {0, 0, 0, 0, 0, 0, 0, 0, 0} )
-    ,  m_iProgressColumns  ( {0, 0, 0, 0, 0, 0, 0, 0, 0} )
-    ,  m_iProgressSquares  ( {0, 0, 0, 0, 0, 0, 0, 0, 0} )
-    ,  m_iUnsolvedPosCount ( 0 )
-    ,  m_vUnsolvedPositions( 0 )
-    ,  m_bGuessMode        ( false )
+
+    :  m_bGuessMode        ( false )
 {
     for ( int i = 0; i < ( 9 * 9 ); ++i)
     {
@@ -26,8 +22,6 @@ CSuDokuBoard::CSuDokuBoard()
         m_shBoard[iX][iY] = 0;
         m_bLookedPositions[iX][iY] = false;
 
-        m_vUnsolvedPositions.push_back( vector2d(iX, iY));
-        m_iUnsolvedPosCount++;
     }
 }
 
@@ -64,7 +58,7 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool bLock )
     }
 
     // Update list of solved positions ( number of unsolved positions, solved in column/row/square )
-    UpdateSolveInformation( pos );
+    ///UpdateSolveInformation( pos );
 
 
     return true;
@@ -72,21 +66,12 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool bLock )
 //============================================================================================================
 //============================================== Status updating =============================================
 //============================================================================================================
-void CSuDokuBoard::UpdateSolveInformation( const vector2d &pos)
-{
-
-    removeFromListOfUnsolvedPositions(pos);
-
-    ++m_iProgressColumns[pos.x];
-    ++m_iProgressRows[pos.y];
-    ++m_iProgressSquares[ pos.x / 3 + (( pos.y / 3) * 3 )];
 
 
-}
+//void CSuDokuBoard::removeFromListOfUnsolvedPositions( const vector2d &pos )
+//{
 
-void CSuDokuBoard::removeFromListOfUnsolvedPositions( const vector2d &pos )
-{
-
+    /*
     std::vector<vector2d>::iterator p;
 
     p = std::find( m_vUnsolvedPositions.begin(), m_vUnsolvedPositions.end(), pos );
@@ -96,9 +81,9 @@ void CSuDokuBoard::removeFromListOfUnsolvedPositions( const vector2d &pos )
         m_vUnsolvedPositions.erase( p );
 
         --m_iUnsolvedPosCount;
-    }
+    }*/
 
-}
+//}
 //==============================================================================================================
 //============================================== Validity checking =============================================
 //==============================================================================================================
@@ -410,7 +395,7 @@ short CSuDokuBoard::getProgressSquare( const vector2d &pos ) const
 
 short CSuDokuBoard::getTotatlProgress() const
 {
-    return ( 9 * 9 ) - m_iUnsolvedPosCount;
+    return ( 9 * 9 );// - m_iUnsolvedPosCount;
 }
 
 
@@ -429,13 +414,13 @@ char CSuDokuBoard::getValueOfPosition( const vector2d &pos ) const
 }
 
 
-
+/*
 
 const std::vector<vector2d>& CSuDokuBoard::getUnsolvedPositions() const
 {
     return m_vUnsolvedPositions;
 }
-
+*/
 
 void CSuDokuBoard::printBoard( const vector2d &pos1, const vector2d &pos2) const
 {
