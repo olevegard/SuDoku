@@ -36,6 +36,8 @@ CSuDokuCell()
     // Sets the digit and marks as solved
 	void setAndMarkAsSolved( short iDigit );
 	void addPossibleDigit( const short shDigit );
+
+    void removeAllPosibilities();
 	bool removePossibleDigit( const short shDigit );
 
 	short tryToSolveCell();
@@ -44,6 +46,37 @@ CSuDokuCell()
 
 	void resetHiddenDouble();
 
+    bool solve()
+    {
+        std::cout << "Solving cell---" << std::endl;
+
+        if (m_bSolved )
+        {
+            std::cout << "   Allready solved" << std::endl;
+            return false;
+
+        }
+
+        if ( m_iCountPossible == 1 )
+         {
+            for ( short i = 0; i < 9; ++i )
+            {
+                std::cout << "   Solving digit : " << i << std::endl;
+
+                if ( m_bPossibleNumbers[i] )
+                {
+                    setAndMarkAsSolved( i );
+                    /*
+                    std::cout << "   Success!\n";
+                    m_iDigit = i;*/
+                    return true;
+
+                }
+            }
+        }
+
+         return false;
+    }
 
 	// Gets
 	short isPossible( const short shDigit1, const short shDigit2 ) const;

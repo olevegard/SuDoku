@@ -2,6 +2,139 @@
 static const bool PRINT_DEBUG = true;
 
 
+bool CSuDokuSolver::solveRow( const short shRow )
+{
+
+    // Check if only one digit is missing for this row
+    int iProgress = m_pBoardStatus->m_iProgressRows[shRow];
+
+    // Allready solved
+    if ( iProgress == 9 )
+    {
+        return false;
+    }
+
+    std::cout << "num missing : " << iProgress << std::endl;
+
+    if ( PRINT_DEBUG )
+    {
+        std::cout << "  Trying to solve row " << shRow << std::endl;
+    }
+
+    if ( iProgress == 8 )
+    {
+        if ( solveRow_SingleDigit(shRow) )
+        {
+            if ( true || PRINT_DEBUG )
+            {
+                std::cout << "Success! (row_single digit solve) Line : " << __LINE__ << std::endl;
+                std::cout << "================================================================================\n";
+            }
+            return true;
+        }
+    }
+    else
+    {
+        /*
+        if ( solveRow_Advanced(shRow) )
+        {
+            if ( PRINT_DEBUG )
+            {
+                std::cout << "Success! (row_advanced solve) Line : " << __LINE__ << std::endl;
+                std::cout << "================================================================================\n";
+            }
+
+            return true;
+        }*/
+    }
+
+    if ( PRINT_DEBUG )
+        std::cout << "  Could not complete row " << shRow << "!\n";
+    return false;
+
+
+}
+
+bool CSuDokuSolver::solveRow_SingleDigit( short iRow )
+{
+    bool bSuccess = false;
+
+    for ( short i = 0; i < 9; ++i )
+    {
+        if ( m_oPossibleNumbers[i][iRow].solve() )
+            bSuccess = true;
+
+    }
+
+    return bSuccess;
+}
+
+bool CSuDokuSolver::solveRow_Advanced ( const short iRow  )
+{
+/*
+    short iPossible =
+    {
+        0, 0, 0,
+        0, 0, 0,
+        0, 0, 0
+
+    };*/
+   bool bSuccess = false;
+
+    for ( short i = 0; i < 9; ++i )
+    {
+        if ( m_oPossibleNumbers[i][iRow].solve() )
+            bSuccess = true;
+
+    }
+
+/*
+    std::vector<vector2d> vEmptyPositions;
+    vector2d prevPossibleMovePos;
+    short possibleMoveCount = 0;
+
+    for ( short i = 0; i < 9; ++i )
+    {
+        // Find all and empty positions digits in shRow
+        if ( m_shBoard[i][shRow] == 0 )
+        {
+            vEmptyPositions.push_back(vector2d(i, shRow));
+        }
+    }
+
+    short shSize = vEmptyPositions.size();
+    short shSolvedPositions = 0;
+    for ( int j = 1; j < 10; j++ )
+    {
+        int i = 0;
+
+        for (; i < shSize; ++i  )
+        {
+            if ( isValidMove( vEmptyPositions[i], j) )
+            {
+                possibleMoveCount++;
+                prevPossibleMovePos = vEmptyPositions[i];
+            }
+        }
+
+        if ( possibleMoveCount == 1)
+        {
+            if ( insert( prevPossibleMovePos, j ) )
+            {
+                return 1;
+                //++shSolvedPositions;
+            }
+        }
+
+        possibleMoveCount = 0;
+
+    }
+    return shSolvedPositions > 0;
+*/
+
+    return bSuccess;
+}
+
 void CSuDokuSolver::insert( const vector2d &pos, short iDigit )
 {
     // Update the possibilities for this position
@@ -179,6 +312,7 @@ void CSuDokuSolver::printAllPosibilities()
 short CSuDokuSolver::solve( const vector2d &pos )
 {
     std::cout << "solving " << pos << std::endl;
+    solveRow( pos.y );
 
     return 0;
 }

@@ -1,6 +1,5 @@
 #include "SuDokuBoard.h"
 #include <cstring>
-#include <algorithm>
 #include <iomanip>
 
 static const bool PRINT_TIME    = true; 	// Prints time status during the end
@@ -68,22 +67,7 @@ bool CSuDokuBoard::insert(const vector2d &pos, short digit, bool bLock )
 //============================================================================================================
 
 
-//void CSuDokuBoard::removeFromListOfUnsolvedPositions( const vector2d &pos )
-//{
 
-    /*
-    std::vector<vector2d>::iterator p;
-
-    p = std::find( m_vUnsolvedPositions.begin(), m_vUnsolvedPositions.end(), pos );
-
-    if ( p != m_vUnsolvedPositions.end() )
-    {
-        m_vUnsolvedPositions.erase( p );
-
-        --m_iUnsolvedPosCount;
-    }*/
-
-//}
 //==============================================================================================================
 //============================================== Validity checking =============================================
 //==============================================================================================================

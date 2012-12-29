@@ -221,6 +221,9 @@ void CBoardManager::loadBoard( const char* czBoard )
         // Convert current char to a digit
         switch ( czBoard[i] )
         {
+            case '0':
+                iDigit = 0;
+                break;
             case '1':
                 iDigit = 1;
                 break;
@@ -249,24 +252,28 @@ void CBoardManager::loadBoard( const char* czBoard )
                 iDigit = 9;
                 break;
             default:
-                iDigit = 0;
+                iDigit = -1;
                 break;
         }
 
-        // Insert digit
-        if ( iDigit != 0 )
+        // If iDigit is < 0, no valid digit was present
+        if ( iDigit >= 0 )
         {
-            insert( pos, iDigit );
-        }
+            // Insert digit
+            if ( iDigit != 0 )
+            {
+                insert( pos, iDigit );
+            }
 
-        // Increment x position of current digit
-        pos.x++;
+            // Increment x position of current digit
+            pos.x++;
 
-        // Update y position of digit
-        if ( pos.x > 8)
-        {
-            pos.x = 0;
-            pos.y++;
+            // Update y position of digit
+            if ( pos.x > 8)
+            {
+                pos.x = 0;
+                pos.y++;
+            }
         }
     }
 
@@ -285,6 +292,7 @@ void CBoardManager::insert( const vector2d &pos, short iDigit )
     {
 
         // Update list of solved positions ( number of unsolved positions, solved in column/row/square )
+        m_oStatus.UpdateSolveInformation( pos );
         //UpdateSolveInformation( pos );
 
         m_oSolver.insert( pos, iDigit );
@@ -294,6 +302,7 @@ void CBoardManager::insert( const vector2d &pos, short iDigit )
 
 void CBoardManager::solveNext()
 {
+    m_oSolver.solve( vector2d(0,0) );
     /*
     vector2d pos = m_oBoard.GetFirstUnsolvedPosition();
     short iDigit = m_oSolver.solve( pos );

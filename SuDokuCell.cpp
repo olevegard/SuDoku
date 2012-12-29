@@ -5,13 +5,10 @@ namespace SuDokuCell
     void CSuDokuCell::setAndMarkAsSolved( short iDigit )
     {
         // Remove all digits and decrement count possible
-        for ( short i = 0; i < 9; ++i )
-        {
-            removePossibleDigit(i);
-        }
+        removeAllPosibilities();
 
         m_bSolved = true;
-        m_iDigit = iDigit;// + 1;
+        m_iDigit = iDigit;
 
     }
 
@@ -30,6 +27,14 @@ namespace SuDokuCell
             --m_iCountPossible;
 
         return bRemoved;
+    }
+
+    void CSuDokuCell::removeAllPosibilities()
+    {
+        for ( short i = 0; i < 9; ++i )
+        {
+            removePossibleDigit(i);
+        }
     }
 
     short  CSuDokuCell::tryToSolveCell()

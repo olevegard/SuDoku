@@ -3,7 +3,7 @@
 
 #include "SuDokuBoard.h"
 #include "SuDokuSolver.h"
-//#include "BoardStatus.h"
+#include "BoardStatus.h"
 
 
 class CBoardManager{
@@ -12,7 +12,9 @@ class CBoardManager{
 public:
     CBoardManager()
         :   m_oBoard()
-        ,   m_oSolver()
+        ,   m_oStatus()
+        ,   m_oSolver( &m_oStatus )
+
     {
 
     }
@@ -40,7 +42,9 @@ private:
 
     void insert( const vector2d &pos, short iDigit );
     CSuDokuBoard m_oBoard;
+
+    BoardStatus m_oStatus;
+
     CSuDokuSolver m_oSolver;
-    //BoardStatus m_oStatus;
 
 };
