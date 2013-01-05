@@ -3,7 +3,7 @@
 #include <cstring>
 
 
-static const bool PRINT_DEBUG = true;
+static const bool PRINT_DEBUG = false;
 
 void CBoardManager::start()
 {
@@ -212,104 +212,107 @@ void CBoardManager::loadBoard()
 
 void CBoardManager::loadBoard( const char* czBoard )
 {
-    short length =  strlen( czBoard );
-    vector2d pos(0,0);
+	short iLength =  strlen( czBoard );
+	vector2d pos(0,0);
 
-    short iDigit = 0;
-    for ( int i = 0; i < length; ++i)
-    {
-        // Convert current char to a digit
-        switch ( czBoard[i] )
-        {
-            case '0':
-                iDigit = 0;
-                break;
-            case '1':
-                iDigit = 1;
-                break;
-            case '2':
-                iDigit = 2;
-                break;
-            case '3':
-                iDigit = 3;
-                break;
-            case '4':
-                iDigit = 4;
-                break;
-            case '5':
-                iDigit = 5;
-                break;
-            case '6':
-                iDigit = 6;
-                break;
-            case '7':
-                iDigit = 7;
-                break;
-            case '8':
-                iDigit = 8;
-                break;
-            case '9':
-                iDigit = 9;
-                break;
-            default:
-                iDigit = -1;
-                break;
-        }
+	short iDigit = 0;
 
-        // If iDigit is < 0, no valid digit was present
-        if ( iDigit >= 0 )
-        {
-            // Insert digit
-            if ( iDigit != 0 )
-            {
-                insert( pos, iDigit );
-            }
+	for ( int i = 0; i < iLength; ++i)
+	{
+		// If current char is space, skip.
+		if ( czBoard[i] != '-' )
+		{
 
-            // Increment x position of current digit
-            pos.x++;
+			// Convert current char to a digit
+			switch ( czBoard[i] )
+			{
+				case '0':
+					iDigit = -1;
+					break;
+				case '1':
+					iDigit = 0;
+					break;
+				case '2':
+					iDigit = 1;
+					break;
+				case '3':
+					iDigit = 2;
+					break;
+				case '4':
+					iDigit = 3;
+					break;
+				case '5':
+					iDigit = 4;
+					break;
+				case '6':
+					iDigit = 5;
+					break;
+				case '7':
+					iDigit = 6;
+					break;
+				case '8':
+					iDigit = 7;
+					break;
+				case '9':
+					iDigit = 8;
+					break;
+				default:
+					iDigit = -1;
+					break;
+			}
 
-            // Update y position of digit
-            if ( pos.x > 8)
-            {
-                pos.x = 0;
-                pos.y++;
-            }
-        }
-    }
+			// Insert digit
+			if ( iDigit >= 0 )
+			{
+				insert( pos, iDigit );
+			}
 
-    m_oBoard.printBoard();
-    m_oSolver.printAllPosibilities();
+			// Increment x position of current digit
+			pos.x++;
+
+			// Update y position of digit
+			if ( pos.x > 8)
+			{
+				pos.x = 0;
+				pos.y++;
+			}
+		}
+	}
+
+	if ( m_oStatus.m_iUnsolvedPosCount== 0 )
+		m_oBoard.printBoard();
+
+	m_oSolver.printAllPosibilities();
 
 }
 
 
 void CBoardManager::insert( const vector2d &pos, short iDigit )
 {
-    std::cout << "inserting " << iDigit << " at : " << pos << std::endl;
+	if ( PRINT_DEBUG )
+		std::cout << "inserting " << iDigit + 1 << " at : " << pos << std::endl;
 
-    // Can iDigit be inserted to pos?
-    if ( m_oBoard.insert( pos, iDigit, true ) )
-    {
+	// Can iDigit be inserted to pos?
+	if ( m_oBoard.insert( pos, iDigit, true ) )
+	{
 
-        // Update list of solved positions ( number of unsolved positions, solved in column/row/square )
-        m_oStatus.UpdateSolveInformation( pos );
-        //UpdateSolveInformation( pos );
+		// Update list of solved positions ( number of unsolved positions, solved in column/row/square )
+		m_oStatus.UpdateSolveInformation( pos );
+		//UpdateSolveInformation( pos );
 
-        m_oSolver.insert( pos, iDigit );
-    }
+		m_oSolver.insert( pos, iDigit );
+	}
 
 }
 
 void CBoardManager::solveNext()
 {
-    m_oSolver.solve( vector2d(0,0) );
-    /*
-    vector2d pos = m_oBoard.GetFirstUnsolvedPosition();
-    short iDigit = m_oSolver.solve( pos );
-    if ( 0 != iDigit  )
-    {
-        m_oBoard.insert( pos, iDigit );
-    }*/
+	if ( m_oSolver.solve( vector2d(0,0) ) != -1 )
+	{
+		std::cout << "Solved!\n";
+		m_oSolver.printAllPosibilities();
+	} else 
+	{
+		std::cout << "not solved\n";
+	}
 }
-
-

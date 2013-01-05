@@ -19,133 +19,134 @@ CSuDokuCell()
 
 	, m_iCountPossible(9)
 	, m_iDigit(0)
+#ifdef __unix__
 	, m_bPossibleNumbers({true,true,true,true,true,true,true,true,true})
+#endif
 {
+
+
+}
+bool remove( const short shDigit ) {
+	bool bRemoved = m_bPossibleNumbers[shDigit];
+	m_bPossibleNumbers[shDigit] = false;
+
+	if ( bRemoved )
+		--m_iCountPossible;
+
+	return bRemoved;
 }
 
+// Sets the digit and marks as solved
+void setAndMarkAsSolved( short iDigit );
+void addPossibleDigit( const short shDigit );
 
-    bool remove( const short shDigit ) {
-        bool bRemoved = m_bPossibleNumbers[shDigit];
-        m_bPossibleNumbers[shDigit] = false;
+void removeAllPosibilities();
+bool removePossibleDigit( const short shDigit );
 
-        if ( bRemoved )
-            --m_iCountPossible;
+short tryToSolveCell();
 
-        return bRemoved;
-    }
-    // Sets the digit and marks as solved
-	void setAndMarkAsSolved( short iDigit );
-	void addPossibleDigit( const short shDigit );
+void removeAllExceptPair ( const short shDigit1, const short shDigit2 );
 
-    void removeAllPosibilities();
-	bool removePossibleDigit( const short shDigit );
+void resetHiddenDouble();
 
-	short tryToSolveCell();
+short solve()
+{
+	std::cout << "Solving cell---" << std::endl;
 
-	void removeAllExceptPair ( const short shDigit1, const short shDigit2 );
-
-	void resetHiddenDouble();
-
-    bool solve()
-    {
-        std::cout << "Solving cell---" << std::endl;
-
-        if (m_bSolved )
-        {
-            std::cout << "   Allready solved" << std::endl;
-            return false;
-
-        }
-
-        if ( m_iCountPossible == 1 )
-         {
-            for ( short i = 0; i < 9; ++i )
-            {
-                std::cout << "   Solving digit : " << i << std::endl;
-
-                if ( m_bPossibleNumbers[i] )
-                {
-                    setAndMarkAsSolved( i );
-                    /*
-                    std::cout << "   Success!\n";
-                    m_iDigit = i;*/
-                    return true;
-
-                }
-            }
-        }
-
-         return false;
-    }
-
-	// Gets
-	short isPossible( const short shDigit1, const short shDigit2 ) const;
-	bool isPossible( short shDigit ) const;
-	bool isSolved() const;
-	short getSolvedDigitP1() const;
-	std::string print( ) const;
-
-	short getHiddenDouble1() const
+	if (m_bSolved )
 	{
-		return m_iHiddenDouble1;
+		std::cout << "   Allready solved" << std::endl;
+		return -1;
 	}
 
-	short getHiddenDouble2() const
+	if ( m_iCountPossible == 1 )
 	{
-		return m_iHiddenDouble2;
+		for ( short i = 0; i < 9; ++i )
+		{
+			std::cout << "   Solving digit : " << i << std::endl;
+
+			if ( m_bPossibleNumbers[i] )
+			{
+				setAndMarkAsSolved( i );
+				return i;
+			}
+		}
 	}
 
-	short getHiddenDouble3() const
-	{
-		return m_iHiddenDouble3;
-	}
+	return -1;
+}
 
-	void setHiddenDouble1( short iDigit )
-	{
-		m_iHiddenDouble1 = iDigit;
-	}
+// Gets
+short isPossible( const short shDigit1, const short shDigit2 ) const;
+bool  isPossible( short shDigit ) const;
 
-	void setHiddenDouble2( short iDigit )
-	{
-		m_iHiddenDouble2 = iDigit;
-	}
+bool  isSolved() const;
 
-	void setHiddenDouble3( short iDigit )
-	{
-		m_iHiddenDouble3 = iDigit;
-	}
+// Returns solved digit + 1 so that it will be between 1 and 9
+short getSolvedDigitP1() const;
 
-	short getCountPossible()
-	{
-		return m_iCountPossible;
-	}
+// Used by << operator
+std::string print( ) const;
 
-	short checkIsHiddenDouble( short iPossibleDouble ) const
-	{
-		return ( iPossibleDouble == m_iHiddenDouble1
+short getHiddenDouble1() const
+{
+	return m_iHiddenDouble1;
+}
+
+short getHiddenDouble2() const
+{
+	return m_iHiddenDouble2;
+}
+
+short getHiddenDouble3() const
+{
+	return m_iHiddenDouble3;
+}
+
+void setHiddenDouble1( short iDigit )
+{
+	m_iHiddenDouble1 = iDigit;
+}
+
+void setHiddenDouble2( short iDigit )
+{
+	m_iHiddenDouble2 = iDigit;
+}
+
+void setHiddenDouble3( short iDigit )
+{
+	m_iHiddenDouble3 = iDigit;
+}
+
+short getCountPossible()
+{
+	return m_iCountPossible;
+}
+
+short checkIsHiddenDouble( short iPossibleDouble ) const
+{
+	return ( iPossibleDouble == m_iHiddenDouble1
 			|| iPossibleDouble == m_iHiddenDouble2
 			|| iPossibleDouble == m_iHiddenDouble3 );
-	}
+}
 
-	short getCountPossible() const
-	{
-		return m_iCountPossible;
-	}
+short getCountPossible() const
+{
+	return m_iCountPossible;
+}
 
 // Variables
 private:
-	bool m_bSolved;
+bool m_bSolved;
 
-	short m_iHiddenDouble1;
-	short m_iHiddenDouble2;
-	short m_iHiddenDouble3;
+short m_iHiddenDouble1;
+short m_iHiddenDouble2;
+short m_iHiddenDouble3;
 
-	short m_iCountPossible;
+short m_iCountPossible;
 
-	short m_iDigit;
-	bool m_bPossibleNumbers[9];
+short m_iDigit;
+bool m_bPossibleNumbers[9];
 };// End of Cell struct...
-
-
 
 }
