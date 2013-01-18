@@ -5,11 +5,11 @@
 static const bool PRINT_DEBUG = false;
 
 
-bool CSuDokuSolver::solveRow( short iRow, short &iProgress )
+bool CSuDokuSolver::solveRow( short iRow )
 {
 
 	// Check if only one digit is missing for this row
-	int iProgress = m_pBoardStatus->m_iProgressRows[iRow];
+	int iProgress = 0;// m_pBoardStatus->m_iProgressRows[iRow];
 
 
 	if ( PRINT_DEBUG )
