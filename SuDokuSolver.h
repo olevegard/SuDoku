@@ -6,11 +6,9 @@
 
 class CSuDokuSolver{
 	public:
-		CSuDokuSolver( BoardStatus* pStatus)
+		CSuDokuSolver()
 			:   m_oPossibleNumbers()
-			    ,   m_pBoardStatus(NULL)
 	{
-		m_pBoardStatus = pStatus;
 	}
 
 		// Set a position as solved, and update all related positions
@@ -26,6 +24,14 @@ class CSuDokuSolver{
 		// 	0 if failed, nothing solved
 		// 	otherwise it returns the new digit for pos.
 		short solve( const vector2d &pos );
+
+		// Tries to solve all by using the Solve() function in SuDokuCell.
+		// The function will only check if there's only one possibilty for this cell.
+		// In other words; this function will solve all cells with one positiblity;
+		void sovleAll_Qucik( 
+				bool bLoopSeveral, 		//!<< If true; loop til no cell was solved. If false; loop once. 
+				std::vector< Digit > &vUsolved	//!<< List of all unsolved digits
+		);
 
 		void printAllPosibilities();
 	private:
@@ -48,6 +54,4 @@ class CSuDokuSolver{
 		// Keeps track of all possible numbers for all positions
 		SuDokuCell::CSuDokuCell m_oPossibleNumbers[9][9];
 
-
-		BoardStatus* m_pBoardStatus;
 };

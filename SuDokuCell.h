@@ -6,10 +6,14 @@
 #include <iostream>
 
 
+
 namespace SuDokuCell
 {
 struct CSuDokuCell
 {
+
+	
+	static const bool PRINT_DEBUG   = false;	// Main debugging option.
 CSuDokuCell()
 	: m_bSolved(false)
 
@@ -51,11 +55,14 @@ void resetHiddenDouble();
 
 short solve()
 {
-	std::cout << "Solving cell---" << std::endl;
+	if ( PRINT_DEBUG )
+		std::cout << "Solving cell---" << std::endl;
 
 	if (m_bSolved )
 	{
-		std::cout << "   Allready solved" << std::endl;
+		if ( PRINT_DEBUG )
+			std::cout << "   Allready solved" << std::endl;
+
 		return -1;
 	}
 
@@ -63,7 +70,8 @@ short solve()
 	{
 		for ( short i = 0; i < 9; ++i )
 		{
-			std::cout << "   Solving digit : " << i << std::endl;
+			if ( PRINT_DEBUG )
+				std::cout << "   Solving digit : " << i << std::endl;
 
 			if ( m_bPossibleNumbers[i] )
 			{

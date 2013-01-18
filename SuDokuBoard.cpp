@@ -82,7 +82,7 @@ bool CSuDokuBoard::checkMoveValidity ( const vector2d &pos, short iDigit ) const
 			&& !isDigitPlacedInSquare( pos,  iDigit )
 		       );
 
-	//if ( PRINT_DEBUG )
+	if ( PRINT_DEBUG )
 		std::cout << "isValidMove " << iDigit + 1 << " into " << pos << " ? " << std::boolalpha << isValid << std::endl;
 
 	if ( !isValid )
@@ -150,7 +150,6 @@ bool CSuDokuBoard::checkBoardValidity(  ) const
 	{
 		if ( !checkRowValidity( i ) || !checkColumnValidity(i) || !checkSquareValidity(pos))
 			bValid = false;
-
 
 		// Increment pos
 		if ( pos.x == 6 )
@@ -389,7 +388,7 @@ char CSuDokuBoard::getValueOfPosition( const vector2d &pos ) const
 	if ( iValue >= 0  )
 	{
 		// Return charter value of this digit
-		return 49 + iValue;
+		return '1' + iValue;
 	}
 	else
 		// No digit ( valid ) digit inserter, return -

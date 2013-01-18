@@ -1,8 +1,11 @@
 #include "SuDokuSolver.h"
+#include "LogTool.h"
+#include "Digit.h"
+
 static const bool PRINT_DEBUG = false;
 
 
-bool CSuDokuSolver::solveRow( short iRow )
+bool CSuDokuSolver::solveRow( short iRow, short &iProgress )
 {
 
 	// Check if only one digit is missing for this row
@@ -308,3 +311,51 @@ short CSuDokuSolver::solve( const vector2d &pos )
 	return iDigit;
 }
 
+
+void CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v )
+{
+	vector2d pos(-1,-1);
+	bool bContinue = true;
+	//std::vector< Digit > &v = m_pBoardStatus->m_vUnsolvedPositions;
+	
+	int iSolvedDigit = -1;
+	timespec startTime;
+	timespec stopTime;
+	std::vector< Digit >::iterator p;
+	clock_gettime( CLOCK_REALTIME, &startTime );
+
+	while ( bContinue )
+	{
+		bContinue = false;
+
+		for ( p = v.begin(); p != v.end(); )
+		{
+			pos = (*p).getPosition();
+
+			if ( PRINT_DEBUG )
+				std::cout << "Solving : " << pos << std::endl;
+			
+			iSolvedDigit = solve( pos );
+
+			if ( iSolvedDigit != -1 )
+			{
+				if ( PRINT_DEBUG )
+					std::cout << "   Erasing : " << (*p).getPosition() << std::endl;
+
+				// Set this digit as solved...
+				(*p).setAsSolved( iSolvedDigit );
+
+				// For looping more than once
+				if ( bLoopSeveral )
+				{
+					bContinue = true;
+					break;
+				}
+			} else 
+				++p;
+		}
+	}
+	
+	clock_gettime( CLOCK_REALTIME, &stopTime );
+	CLogTool::LogTime( startTime, stopTime );
+}

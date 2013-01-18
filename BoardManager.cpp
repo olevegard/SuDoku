@@ -307,12 +307,20 @@ void CBoardManager::insert( const vector2d &pos, short iDigit )
 
 void CBoardManager::solveNext()
 {
-	if ( m_oSolver.solve( vector2d(0,0) ) != -1 )
+	/*
+	short iDigit = m_oSolver.solve( vector2d(1,0) );
+	if ( iDigit != -1 )
 	{
 		std::cout << "Solved!\n";
 		m_oSolver.printAllPosibilities();
+		m_oBoard.insert( vector2d( 1, 0 ), iDigit );
 	} else 
 	{
 		std::cout << "not solved\n";
 	}
+	
+	m_oBoard.printBoard();
+*/
+	m_oSolver.sovleAll_Qucik( true, m_oStatus.m_vUnsolvedPositions );
+	m_oSolver.printAllPosibilities();
 }
