@@ -66,3 +66,6 @@ struct BoardStatus
 	std::vector<Digit> m_vUnsolvedPositions;
 
 };
+
+
+

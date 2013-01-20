@@ -212,6 +212,7 @@ void CSuDokuSolver::removePossibilitiesInsert( const vector2d &pos, const short 
 void CSuDokuSolver::printAllPosibilities()
 {
 
+	std::cout << "=======================================PRITING POSSIBILITIES=======================================\n";
 	int iColumn = 0;
 	int iRow = 0;
 	for ( iRow = 0; iRow < 9; ++iRow )
@@ -238,6 +239,7 @@ void CSuDokuSolver::printAllPosibilities()
 				std::cout << "  ";
 
 		}
+
 		std::cout << std::endl;
 
 		for ( int iColumn = 0; iColumn < 9; ++ iColumn)
@@ -294,6 +296,7 @@ void CSuDokuSolver::printAllPosibilities()
 
 	}
 
+	std::cout << "==================================================================================================\n";
 }
 
 short CSuDokuSolver::solve( const vector2d &pos )
@@ -312,16 +315,18 @@ short CSuDokuSolver::solve( const vector2d &pos )
 }
 
 
-void CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v )
+short CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v )
 {
+
 	vector2d pos(-1,-1);
-	bool bContinue = true;
-	//std::vector< Digit > &v = m_pBoardStatus->m_vUnsolvedPositions;
-	
+	std::vector< Digit >::iterator p;
 	int iSolvedDigit = -1;
+
+	short iSolveCount = 0;
+	bool bContinue = true;
 	timespec startTime;
 	timespec stopTime;
-	std::vector< Digit >::iterator p;
+
 	clock_gettime( CLOCK_REALTIME, &startTime );
 
 	while ( bContinue )
@@ -334,13 +339,15 @@ void CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v )
 
 			if ( PRINT_DEBUG )
 				std::cout << "Solving : " << pos << std::endl;
-			
+
 			iSolvedDigit = solve( pos );
 
 			if ( iSolvedDigit != -1 )
 			{
 				if ( PRINT_DEBUG )
-					std::cout << "   Erasing : " << (*p).getPosition() << std::endl;
+					std::cout << "   Solve : " << (*p).getPosition() << " is " << iSolvedDigit + 1 <<  std::endl;
+
+				++iSolveCount;
 
 				// Set this digit as solved...
 				(*p).setAsSolved( iSolvedDigit );
@@ -355,7 +362,8 @@ void CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v )
 				++p;
 		}
 	}
-	
+
 	clock_gettime( CLOCK_REALTIME, &stopTime );
 	CLogTool::LogTime( startTime, stopTime );
+	return iSolveCount;
 }

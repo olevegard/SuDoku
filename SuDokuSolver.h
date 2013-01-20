@@ -28,7 +28,7 @@ class CSuDokuSolver{
 		// Tries to solve all by using the Solve() function in SuDokuCell.
 		// The function will only check if there's only one possibilty for this cell.
 		// In other words; this function will solve all cells with one positiblity;
-		void sovleAll_Qucik( 
+		short sovleAll_Qucik( 
 				bool bLoopSeveral, 		//!<< If true; loop til no cell was solved. If false; loop once. 
 				std::vector< Digit > &vUsolved	//!<< List of all unsolved digits
 		);

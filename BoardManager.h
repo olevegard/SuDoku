@@ -34,7 +34,7 @@ class CBoardManager{
 		void loadBoard( const char* board );
 
 		void solveNext( );
-
+		void solveAll( );
 
 
 

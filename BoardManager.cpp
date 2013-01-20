@@ -321,6 +321,36 @@ void CBoardManager::solveNext()
 	
 	m_oBoard.printBoard();
 */
-	m_oSolver.sovleAll_Qucik( true, m_oStatus.m_vUnsolvedPositions );
-	m_oSolver.printAllPosibilities();
+}
+void CBoardManager::solveAll( )
+{
+
+	short iCountSolved = m_oSolver.sovleAll_Qucik( true, m_oStatus.m_vUnsolvedPositions );
+
+	std::vector<Digit> v = m_oStatus.m_vUnsolvedPositions;
+	std::vector<Digit>::iterator p = v.begin();
+	for ( ; p != v.end();  )
+	{
+		Digit& currentDigit = (*p);
+		std::cout << currentDigit << std::endl;
+
+		if ( (*p).isSolved() )
+		{
+			m_oBoard.insert( currentDigit );
+			v.erase( p );
+		} else 
+		{
+			++p;
+		}
+
+	}
+
+	
+	if ( iCountSolved == m_oStatus.m_iUnsolvedPosCount )
+	{
+		m_oBoard.printBoard();
+	} else 
+	{
+		m_oSolver.printAllPosibilities();
+	}
 }
