@@ -23,11 +23,6 @@ struct vector2d{
 		y = vec.y;
 	}
 
-	bool operator==( const vector2d &vec )
-	{
-		return ( vec.x == this->x && vec.y == this->y );
-	}
-
 	vector2d GetOrigo() const
 	{
 		// x and y is short, so x / 3 will never be a floating point number
@@ -40,6 +35,10 @@ struct vector2d{
 
 };
 
+inline bool operator==( const vector2d &vec1, const vector2d &vec2)
+{
+	return ( vec1.x == vec2.x && vec1.y == vec2.y );
+}
 
 inline std::ostream& operator<<(std::ostream& stream, const vector2d& pos)
 {

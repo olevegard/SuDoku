@@ -47,9 +47,18 @@ struct BoardStatus
 		{
 			m_vUnsolvedPositions.erase( p );
 
-			--m_iUnsolvedPosCount;
 		}
+		
+		erasePosition( pos );
 
+	}
+
+	void erasePosition( const vector2d& pos )
+	{
+		--m_iUnsolvedPosCount;
+
+		--m_iProgressRows[pos.x];
+		--m_iProgressColumns[pos.y];
 	}
 
 

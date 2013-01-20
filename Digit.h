@@ -72,3 +72,8 @@ inline std::ostream& operator<<(std::ostream& stream, const Digit& digit )
 	return stream;
 }
 
+inline bool operator<<( const Digit &digit1, const Digit &digit2 )
+{
+	return digit1.getPosition() ==  digit2.getPosition(); 
+}
+
