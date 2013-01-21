@@ -364,6 +364,11 @@ short CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v 
 	}
 
 	clock_gettime( CLOCK_REALTIME, &stopTime );
-	CLogTool::LogTime( startTime, stopTime );
+	//CLogTool::LogTime( startTime, stopTime );
+
 	return iSolveCount;
+}
+bool solveAll_Full( const BoardStatus &boardStatus)
+{
+	return ( boardStatus.m_iProgressRows[0] == 0 );
 }

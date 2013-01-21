@@ -33,6 +33,20 @@ class CSuDokuSolver{
 				std::vector< Digit > &vUsolved	//!<< List of all unsolved digits
 		);
 
+		// Will try to solve possiblities, but not insert any diigits.
+		// Will try every solve possibility and return true if a possiblitiy was removed.
+		// Should be used togehter will solveAll_Quick
+		bool solveAll_Full( const BoardStatus &boardStatus);
+		
+		// Prints every possibilities in the following format :
+		// 1  -  3
+		// -  5  6
+		// 7  8  -
+		// if 1, 3, 5, 6, 7 and 8 are possible.
+		// -  -  -
+		// - |2| -
+		// -  -  -
+		// If the digit is solved witht 2 as the value
 		void printAllPosibilities();
 	private:
 

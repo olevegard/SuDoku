@@ -1,4 +1,6 @@
 #include "BoardManager.h"
+#include "LogTool.h"
+
 #include <iomanip>
 #include <cstring>
 
@@ -325,10 +327,16 @@ void CBoardManager::solveNext()
 void CBoardManager::solveAll( )
 {
 
+	timespec startTime;
+	timespec stopTime;
+
+	clock_gettime( CLOCK_REALTIME, &startTime );
+
 	m_oSolver.sovleAll_Qucik( true, m_oStatus.m_vUnsolvedPositions );
 
 	std::vector<Digit> v = m_oStatus.m_vUnsolvedPositions;
 	std::vector<Digit>::iterator p = v.begin();
+
 	for ( ; p != v.end();  )
 	{
 		Digit& currentDigit = (*p);
@@ -345,12 +353,13 @@ void CBoardManager::solveAll( )
 		{
 			++p;
 		}
-
 	}
 
 	
 	if ( 0 == m_oStatus.m_iUnsolvedPosCount )
 	{
+		clock_gettime( CLOCK_REALTIME, &stopTime );
+		CLogTool::LogTime( startTime, stopTime );
 		m_oBoard.printBoard();
 	} else 
 	{

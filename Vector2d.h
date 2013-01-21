@@ -15,6 +15,7 @@ struct vector2d{
 		:   x(-1)
 		    ,   y(-1)
 	{}
+
 	vector2d( const vector2d& vec)
 		:   x(1)
 		    ,   y(2)
