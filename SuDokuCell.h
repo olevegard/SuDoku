@@ -1,11 +1,8 @@
 #pragma once
 
-
 #include "Vector2d.h"
 #include <sstream>
 #include <iostream>
-
-
 
 namespace SuDokuCell
 {
@@ -53,36 +50,7 @@ void removeAllExceptPair ( const short shDigit1, const short shDigit2 );
 
 void resetHiddenDouble();
 
-short solve()
-{
-	if ( PRINT_DEBUG )
-		std::cout << "Solving cell---" << std::endl;
-
-	if (m_bSolved )
-	{
-		if ( PRINT_DEBUG )
-			std::cout << "   Allready solved" << std::endl;
-
-		return -1;
-	}
-
-	if ( m_iCountPossible == 1 )
-	{
-		for ( short i = 0; i < 9; ++i )
-		{
-			if ( PRINT_DEBUG )
-				std::cout << "   Solving digit : " << i << std::endl;
-
-			if ( m_bPossibleNumbers[i] )
-			{
-				setAndMarkAsSolved( i );
-				return i;
-			}
-		}
-	}
-
-	return -1;
-}
+short solve();
 
 // Gets
 short isPossible( const short shDigit1, const short shDigit2 ) const;
@@ -143,6 +111,36 @@ short getCountPossible() const
 	return m_iCountPossible;
 }
 
+bool isNakedPair( const CSuDokuCell &cell )
+{
+	short iCountPossible = 0;
+
+	if ( isSolved() || cell.isSolved() )
+		return false;
+
+	for ( short i = 0; i < 9; ++i)
+	{
+		// This and Cell2 both is possible in both or neither ( they are the same )
+		if ( m_bPossibleNumbers[i] != cell.m_bPossibleNumbers[i])
+			return false;
+
+		// Digit i is possible in this cell, which means it is possible in Cell2 as well
+		if ( m_bPossibleNumbers[i])
+		{
+			if ( iCountPossible == 0)
+			{
+				setHiddenDouble1( i );
+			} else
+			{
+				setHiddenDouble2( i );
+			}
+
+			++iCountPossible;
+		}
+	}
+
+	return ( iCountPossible == 2 );
+}
 // Variables
 private:
 bool m_bSolved;

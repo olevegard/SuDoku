@@ -1,3 +1,5 @@
+#pragma once
+
 class CLogTool
 {
 
@@ -10,7 +12,7 @@ class CLogTool
 			unsigned long long iTimeDelta = iTimeStop - iTimeStart;
 
 			std::cout << "====================Time used ====================\n"
-				<< "||\tSeconds      : " << static_cast< float > ( iTimeDelta / 1000000000.0f ) << " ms\t||\n"
+				<< "||\tSeconds      : " << static_cast< float > ( iTimeDelta / 1000000000.0f ) << " s\t||\n"
 				<< "||\tMilliseconds : " << static_cast< float > ( iTimeDelta / 1000000.0f ) << " ms\t||\n"
 				<< "||\tMicroseconds : " << static_cast< float > ( iTimeDelta / 1000.0f ) << " µs\t||\n"
 				<< "||\tNanoseconds  : " << static_cast< float > ( iTimeDelta ) << " ns\t\t||\n";

@@ -33,6 +33,12 @@ bool CSuDokuBoard::insert(const vector2d &pos, short iDigit, bool bLock )
 	if ( PRINT_INFO)
 		std::cout << "insert " << pos << " digit : " << iDigit + 1 << std::endl;
 
+	if ( m_shBoard[pos.x][pos.y] != -1 )
+	{
+		std::cout << "pos : " << pos << " allready filled!\n";
+		return ( m_shBoard[pos.x][pos.y] == iDigit );
+	}
+
 	// Need to know if the move is valid
 	// Need to check if position is locked ( if something has been inserted into this position allready )
 	if ( chekIfPositionIsLocked(pos) || !checkMoveValidity( pos, iDigit ) )
@@ -294,7 +300,10 @@ bool CSuDokuBoard::isDigitPlacedInColumn( short iColumn, short iDigit ) const
 	for ( short i = 0; i < 9; ++i ) {
 
 		if ( m_shBoard[iColumn][i] == iDigit)
+		{
+			std::cout << "Line : " << __LINE__ << " Digit " << iDigit + 1 << " found in " << iColumn << " , " << i << std::endl;
 			return true;
+		}
 	}
 
 	return false;
@@ -305,7 +314,10 @@ bool CSuDokuBoard::isDigitPlacedInRow( short iRow, short iDigit ) const
 	for ( short i = 0; i < 9; ++i ) {
 
 		if ( m_shBoard[i][iRow] == iDigit)
+		{
+			std::cout << "Line : " << __LINE__ << " Digit " << iDigit + 1 << " found in " << i << " , " << iRow << std::endl;
 			return true;
+		}
 	}
 
 	return false;
@@ -320,7 +332,10 @@ bool CSuDokuBoard::isDigitPlacedInSquare( const vector2d &pos, short iDigit) con
 		for ( ; j < 3; j++ ) {
 
 			if ( m_shBoard[ posOrigo.x + i][posOrigo.y + j] == iDigit)
+			{
+				std::cout << "Line : " << __LINE__  << " Digit " << iDigit + 1 << " found in " << posOrigo.x + i << " , " << posOrigo.y + i << std::endl;
 				return true;
+			}
 		}
 
 		j = 0;

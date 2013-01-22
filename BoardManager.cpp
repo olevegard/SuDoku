@@ -19,197 +19,197 @@ void CBoardManager::start()
 void CBoardManager::loadBoard()
 {
 
-    /*
-    // BOARD 5 - SOLVED
-    insert(vector2d( 3, 0), 2, true);
-    insert(vector2d( 7, 0), 6, true);
-    insert(vector2d( 8, 0), 3, true);
+	/*
+	// BOARD 5 - SOLVED
+	insert(vector2d( 3, 0), 2, true);
+	insert(vector2d( 7, 0), 6, true);
+	insert(vector2d( 8, 0), 3, true);
 
-    insert(vector2d( 0, 1), 3, true);
-    insert(vector2d( 5, 1), 5, true);
-    insert(vector2d( 6, 1), 4, true);
-    insert(vector2d( 8, 1), 1, true);
+	insert(vector2d( 0, 1), 3, true);
+	insert(vector2d( 5, 1), 5, true);
+	insert(vector2d( 6, 1), 4, true);
+	insert(vector2d( 8, 1), 1, true);
 
-    insert(vector2d( 2, 2), 1, true);
-    insert(vector2d( 5, 2), 3, true);
-    insert(vector2d( 6, 2), 9, true);
-    insert(vector2d( 7, 2), 8, true);
+	insert(vector2d( 2, 2), 1, true);
+	insert(vector2d( 5, 2), 3, true);
+	insert(vector2d( 6, 2), 9, true);
+	insert(vector2d( 7, 2), 8, true);
 
-    insert(vector2d( 7, 3), 9, true);
+	insert(vector2d( 7, 3), 9, true);
 
-    insert(vector2d( 3, 4), 5, true);
-    insert(vector2d( 4, 4), 3, true);
-    insert(vector2d( 5, 4), 8, true);
+	insert(vector2d( 3, 4), 5, true);
+	insert(vector2d( 4, 4), 3, true);
+	insert(vector2d( 5, 4), 8, true);
 
-    insert(vector2d( 1, 5), 3, true);
+	insert(vector2d( 1, 5), 3, true);
 
-    insert(vector2d( 1, 6), 2, true);
-    insert(vector2d( 2, 6), 6, true);
-    insert(vector2d( 3, 6), 3, true);
-    insert(vector2d( 6, 6), 5, true);
+	insert(vector2d( 1, 6), 2, true);
+	insert(vector2d( 2, 6), 6, true);
+	insert(vector2d( 3, 6), 3, true);
+	insert(vector2d( 6, 6), 5, true);
 
-    insert(vector2d( 0, 7), 5, true);
-    insert(vector2d( 2, 7), 3, true);
-    insert(vector2d( 3, 7), 7, true);
-    insert(vector2d( 8, 7), 8, true);
+	insert(vector2d( 0, 7), 5, true);
+	insert(vector2d( 2, 7), 3, true);
+	insert(vector2d( 3, 7), 7, true);
+	insert(vector2d( 8, 7), 8, true);
 
-    insert(vector2d( 0, 8), 4, true);
-    insert(vector2d( 1, 8), 7, true);
-    insert(vector2d( 5, 8), 1, true);
-
-
-    // BOARD 4 - SOLVED
-    insert(vector2d( 0, 0), 3, true);
-    insert(vector2d( 5, 0), 8, true);
-
-    insert(vector2d( 0, 1), 7, true);
-    insert(vector2d( 2, 1), 8, true);
-    insert(vector2d( 3, 1), 3, true);
-    insert(vector2d( 4, 1), 2, true);
-    insert(vector2d( 8, 1), 5, true);
-
-    insert(vector2d( 3, 2), 9, true);
-    insert(vector2d( 7, 2), 1, true);
-
-    insert(vector2d( 0, 3), 9, true);
-    insert(vector2d( 5, 3), 4, true);
-    insert(vector2d( 7, 3), 2, true);
-
-    insert(vector2d( 4, 4), 1, true);
-
-    insert(vector2d( 1, 5), 7, true);
-    insert(vector2d( 3, 5), 8, true);
-    insert(vector2d( 8, 5), 9, true);
-
-    insert(vector2d( 1, 6), 5, true);
-    insert(vector2d( 5, 6), 3, true);
-
-    insert(vector2d( 0, 7), 8, true);
-    insert(vector2d( 4, 7), 4, true);
-    insert(vector2d( 5, 7), 7, true);
-    insert(vector2d( 6, 7), 5, true);
-    insert(vector2d( 8, 7), 3, true);
-
-    insert(vector2d( 3, 8), 5, true);
-    insert(vector2d( 8, 8), 6, true);
-
-    // BOARD 3 - SOLVED
-    insert( vector2d( 3, 0), 8, true);
-    insert( vector2d( 4, 0), 4, true);
-    insert( vector2d( 8, 0), 9, true);
-
-    insert( vector2d( 2, 1), 1, true);
-    insert( vector2d( 8, 1), 5, true);
-
-    insert( vector2d( 0, 2), 8, true);
-    insert( vector2d( 4, 2), 2, true);
-    insert( vector2d( 5, 2), 1, true);
-    insert( vector2d( 6, 2), 4, true);
-    insert( vector2d( 7, 2), 6, true);
-
-    insert( vector2d( 0, 3), 7, true);
-    insert( vector2d( 2, 3), 8, true);
-    insert( vector2d( 7, 3), 9, true);
-
-    insert( vector2d( 1, 5), 5, true);
-    insert( vector2d( 6, 5), 3, true);
-    insert( vector2d( 8, 5), 1, true);
-
-    insert( vector2d( 1, 6), 2, true);
-    insert( vector2d( 2, 6), 4, true);
-    insert( vector2d( 3, 6), 9, true);
-    insert( vector2d( 4, 6), 1, true);
-    insert( vector2d( 8, 6), 7, true);
-
-    insert( vector2d( 0, 7), 9, true);
-    insert( vector2d( 6, 7), 5, true);
-
-    insert( vector2d( 0, 8), 3, true);
-    insert( vector2d( 4, 8), 8, true);
-    insert( vector2d( 5, 8), 4, true);
-    // END BOARD 3
-
-    // BOARD 2 - SOLVED
-    insert( vector2d( 3, 0), 9, true);
-    insert( vector2d( 5, 0), 1, true);
-
-    insert( vector2d( 0, 1), 7, true);
-    insert( vector2d( 2, 1), 1, true);
-    insert( vector2d( 4, 1), 3, true);
-    insert( vector2d( 6, 1), 4, true);
-
-    insert( vector2d( 1, 2), 8, true);
-    insert( vector2d( 4, 2), 6, true);
-    insert( vector2d( 6, 2), 1, true);
-
-    insert( vector2d( 0, 3), 1, true);
-    insert( vector2d( 1, 3), 9, true);
-    insert( vector2d( 2, 3), 5, true);
-    insert( vector2d( 7, 3), 8, true);
-
-    insert( vector2d( 1, 5), 4, true);
-    insert( vector2d( 6, 5), 5, true);
-    insert( vector2d( 7, 5), 6, true);
-    insert( vector2d( 8, 5), 7, true);
-
-    insert( vector2d( 2, 6), 3, true);
-    insert( vector2d( 4, 6), 1, true);
-    insert( vector2d( 7, 6), 9, true);
-
-    insert( vector2d( 2, 7), 8, true);
-    insert( vector2d( 4, 7), 5, true);
-    insert( vector2d( 6, 7), 6, true);
-    insert( vector2d( 8, 7), 2, true);
-
-    insert( vector2d( 3, 8), 6, true);
-    insert( vector2d( 5, 8), 2, true);
-    // END BOARD 2
-
-    // BOARD 1 - SOLVED
-    insert( vector2d( 0, 0), 5, true);
-    insert( vector2d( 3, 0), 3, true);
-    insert( vector2d( 5, 0), 6, true);
-    insert( vector2d( 8, 0), 2, true);
-
-    insert( vector2d( 1, 1), 1, true);
-    insert( vector2d( 3, 1), 2, true);
-    insert( vector2d( 5, 1), 7, true);
-    insert( vector2d( 7, 1), 4, true);
-
-    insert( vector2d( 2, 2), 2, true);
-    insert( vector2d( 4, 2), 9, true);
-    insert( vector2d( 6, 2), 8, true);
-
-    insert( vector2d( 0, 3), 2, true);
-    insert( vector2d( 2, 3), 3, true);
-    insert( vector2d( 6, 3), 1, true);
-    insert( vector2d( 8, 3), 4, true);
-
-    insert( vector2d( 3, 4), 4, true);
-    insert( vector2d( 5, 4), 1, true);
-
-    insert( vector2d( 0, 5), 9, true);
-    insert( vector2d( 2, 5), 1, true);
-    insert( vector2d( 6, 5), 2, true);
-    insert( vector2d( 8, 5), 5, true);
-
-    insert( vector2d( 2, 6), 5, true);
-    insert( vector2d( 4, 6), 4, true);
-    insert( vector2d( 6, 6), 6, true);
-
-    insert( vector2d( 1, 7), 3, true);
-    insert( vector2d( 3, 7), 8, true);
-    insert( vector2d( 5, 7), 9, true);
-    insert( vector2d( 7, 7), 2, true);
-
-    insert( vector2d( 0, 8), 1, true);
-    insert( vector2d( 3, 8), 5, true);
-    insert( vector2d( 5, 8), 2, true);
-    insert( vector2d( 8, 8), 8, true);
-    // END BOARD 1
+	insert(vector2d( 0, 8), 4, true);
+	insert(vector2d( 1, 8), 7, true);
+	insert(vector2d( 5, 8), 1, true);
 
 
-    */
+	// BOARD 4 - SOLVED
+	insert(vector2d( 0, 0), 3, true);
+	insert(vector2d( 5, 0), 8, true);
+
+	insert(vector2d( 0, 1), 7, true);
+	insert(vector2d( 2, 1), 8, true);
+	insert(vector2d( 3, 1), 3, true);
+	insert(vector2d( 4, 1), 2, true);
+	insert(vector2d( 8, 1), 5, true);
+
+	insert(vector2d( 3, 2), 9, true);
+	insert(vector2d( 7, 2), 1, true);
+
+	insert(vector2d( 0, 3), 9, true);
+	insert(vector2d( 5, 3), 4, true);
+	insert(vector2d( 7, 3), 2, true);
+
+	insert(vector2d( 4, 4), 1, true);
+
+	insert(vector2d( 1, 5), 7, true);
+	insert(vector2d( 3, 5), 8, true);
+	insert(vector2d( 8, 5), 9, true);
+
+	insert(vector2d( 1, 6), 5, true);
+	insert(vector2d( 5, 6), 3, true);
+
+	insert(vector2d( 0, 7), 8, true);
+	insert(vector2d( 4, 7), 4, true);
+	insert(vector2d( 5, 7), 7, true);
+	insert(vector2d( 6, 7), 5, true);
+	insert(vector2d( 8, 7), 3, true);
+
+	insert(vector2d( 3, 8), 5, true);
+	insert(vector2d( 8, 8), 6, true);
+
+	// BOARD 3 - SOLVED
+	insert( vector2d( 3, 0), 8, true);
+	insert( vector2d( 4, 0), 4, true);
+	insert( vector2d( 8, 0), 9, true);
+
+	insert( vector2d( 2, 1), 1, true);
+	insert( vector2d( 8, 1), 5, true);
+
+	insert( vector2d( 0, 2), 8, true);
+	insert( vector2d( 4, 2), 2, true);
+	insert( vector2d( 5, 2), 1, true);
+	insert( vector2d( 6, 2), 4, true);
+	insert( vector2d( 7, 2), 6, true);
+
+	insert( vector2d( 0, 3), 7, true);
+	insert( vector2d( 2, 3), 8, true);
+	insert( vector2d( 7, 3), 9, true);
+
+	insert( vector2d( 1, 5), 5, true);
+	insert( vector2d( 6, 5), 3, true);
+	insert( vector2d( 8, 5), 1, true);
+
+	insert( vector2d( 1, 6), 2, true);
+	insert( vector2d( 2, 6), 4, true);
+	insert( vector2d( 3, 6), 9, true);
+	insert( vector2d( 4, 6), 1, true);
+	insert( vector2d( 8, 6), 7, true);
+
+	insert( vector2d( 0, 7), 9, true);
+	insert( vector2d( 6, 7), 5, true);
+
+	insert( vector2d( 0, 8), 3, true);
+	insert( vector2d( 4, 8), 8, true);
+	insert( vector2d( 5, 8), 4, true);
+	// END BOARD 3
+
+	// BOARD 2 - SOLVED
+	insert( vector2d( 3, 0), 9, true);
+	insert( vector2d( 5, 0), 1, true);
+
+	insert( vector2d( 0, 1), 7, true);
+	insert( vector2d( 2, 1), 1, true);
+	insert( vector2d( 4, 1), 3, true);
+	insert( vector2d( 6, 1), 4, true);
+
+	insert( vector2d( 1, 2), 8, true);
+	insert( vector2d( 4, 2), 6, true);
+	insert( vector2d( 6, 2), 1, true);
+
+	insert( vector2d( 0, 3), 1, true);
+	insert( vector2d( 1, 3), 9, true);
+	insert( vector2d( 2, 3), 5, true);
+	insert( vector2d( 7, 3), 8, true);
+
+	insert( vector2d( 1, 5), 4, true);
+	insert( vector2d( 6, 5), 5, true);
+	insert( vector2d( 7, 5), 6, true);
+	insert( vector2d( 8, 5), 7, true);
+
+	insert( vector2d( 2, 6), 3, true);
+	insert( vector2d( 4, 6), 1, true);
+	insert( vector2d( 7, 6), 9, true);
+
+	insert( vector2d( 2, 7), 8, true);
+	insert( vector2d( 4, 7), 5, true);
+	insert( vector2d( 6, 7), 6, true);
+	insert( vector2d( 8, 7), 2, true);
+
+	insert( vector2d( 3, 8), 6, true);
+	insert( vector2d( 5, 8), 2, true);
+	// END BOARD 2
+
+	// BOARD 1 - SOLVED
+	insert( vector2d( 0, 0), 5, true);
+	insert( vector2d( 3, 0), 3, true);
+	insert( vector2d( 5, 0), 6, true);
+	insert( vector2d( 8, 0), 2, true);
+
+	insert( vector2d( 1, 1), 1, true);
+	insert( vector2d( 3, 1), 2, true);
+	insert( vector2d( 5, 1), 7, true);
+	insert( vector2d( 7, 1), 4, true);
+
+	insert( vector2d( 2, 2), 2, true);
+	insert( vector2d( 4, 2), 9, true);
+	insert( vector2d( 6, 2), 8, true);
+
+	insert( vector2d( 0, 3), 2, true);
+	insert( vector2d( 2, 3), 3, true);
+	insert( vector2d( 6, 3), 1, true);
+	insert( vector2d( 8, 3), 4, true);
+
+	insert( vector2d( 3, 4), 4, true);
+	insert( vector2d( 5, 4), 1, true);
+
+	insert( vector2d( 0, 5), 9, true);
+	insert( vector2d( 2, 5), 1, true);
+	insert( vector2d( 6, 5), 2, true);
+	insert( vector2d( 8, 5), 5, true);
+
+	insert( vector2d( 2, 6), 5, true);
+	insert( vector2d( 4, 6), 4, true);
+	insert( vector2d( 6, 6), 6, true);
+
+	insert( vector2d( 1, 7), 3, true);
+	insert( vector2d( 3, 7), 8, true);
+	insert( vector2d( 5, 7), 9, true);
+	insert( vector2d( 7, 7), 2, true);
+
+	insert( vector2d( 0, 8), 1, true);
+	insert( vector2d( 3, 8), 5, true);
+	insert( vector2d( 5, 8), 2, true);
+	insert( vector2d( 8, 8), 8, true);
+	// END BOARD 1
+
+
+	*/
 }
 
 void CBoardManager::loadBoard( const char* czBoard )
@@ -310,19 +310,19 @@ void CBoardManager::insert( const vector2d &pos, short iDigit )
 void CBoardManager::solveNext()
 {
 	/*
-	short iDigit = m_oSolver.solve( vector2d(1,0) );
-	if ( iDigit != -1 )
-	{
-		std::cout << "Solved!\n";
-		m_oSolver.printAllPosibilities();
-		m_oBoard.insert( vector2d( 1, 0 ), iDigit );
-	} else 
-	{
-		std::cout << "not solved\n";
-	}
-	
-	m_oBoard.printBoard();
-*/
+	   short iDigit = m_oSolver.solve( vector2d(1,0) );
+	   if ( iDigit != -1 )
+	   {
+	   std::cout << "Solved!\n";
+	   m_oSolver.printAllPosibilities();
+	   m_oBoard.insert( vector2d( 1, 0 ), iDigit );
+	   } else 
+	   {
+	   std::cout << "not solved\n";
+	   }
+
+	   m_oBoard.printBoard();
+	   */
 }
 void CBoardManager::solveAll( )
 {
@@ -334,7 +334,7 @@ void CBoardManager::solveAll( )
 
 	m_oSolver.sovleAll_Qucik( true, m_oStatus.m_vUnsolvedPositions );
 
-	std::vector<Digit> v = m_oStatus.m_vUnsolvedPositions;
+	std::vector<Digit> &v = m_oStatus.m_vUnsolvedPositions;
 	std::vector<Digit>::iterator p = v.begin();
 
 	for ( ; p != v.end();  )
@@ -355,7 +355,7 @@ void CBoardManager::solveAll( )
 		}
 	}
 
-	
+
 	if ( 0 == m_oStatus.m_iUnsolvedPosCount )
 	{
 		clock_gettime( CLOCK_REALTIME, &stopTime );
@@ -363,6 +363,12 @@ void CBoardManager::solveAll( )
 		m_oBoard.printBoard();
 	} else 
 	{
-		m_oSolver.printAllPosibilities();
+		if ( m_oSolver.solveAll_Full( m_oStatus ) )
+		{
+			m_oSolver.printAllPosibilities();
+			solveAll( );
+		}
 	}
+
+	m_oSolver.printAllPosibilities();
 }

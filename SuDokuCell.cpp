@@ -133,6 +133,36 @@ namespace SuDokuCell
 		return stream.str();
 	}
 
+	short CSuDokuCell::solve()
+	{
+	if ( PRINT_DEBUG )
+		std::cout << "Solving cell---" << std::endl;
+
+	if (m_bSolved )
+	{
+		if ( PRINT_DEBUG )
+			std::cout << "   Allready solved" << std::endl;
+
+		return -1;
+	}
+
+	if ( m_iCountPossible == 1 )
+	{
+		for ( short i = 0; i < 9; ++i )
+		{
+			if ( PRINT_DEBUG )
+				std::cout << "   Solving digit : " << i << std::endl;
+
+			if ( m_bPossibleNumbers[i] )
+			{
+				setAndMarkAsSolved( i );
+				return i;
+			}
+		}
+	}
+
+	return -1;
+}
 	// opeator << defined as a non-member function as it shouold be
 	inline std::ostream& operator<<(std::ostream& stream, const CSuDokuCell& cell)
 	{

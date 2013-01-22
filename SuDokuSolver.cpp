@@ -324,16 +324,13 @@ short CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v 
 
 	short iSolveCount = 0;
 	bool bContinue = true;
-	timespec startTime;
-	timespec stopTime;
-
-	clock_gettime( CLOCK_REALTIME, &startTime );
 
 	while ( bContinue )
 	{
 		bContinue = false;
+		p = v.begin(); 
 
-		for ( p = v.begin(); p != v.end(); )
+		for ( ;p != v.end(); )
 		{
 			pos = (*p).getPosition();
 
@@ -363,12 +360,87 @@ short CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v 
 		}
 	}
 
-	clock_gettime( CLOCK_REALTIME, &stopTime );
-	//CLogTool::LogTime( startTime, stopTime );
-
 	return iSolveCount;
 }
-bool solveAll_Full( const BoardStatus &boardStatus)
+bool CSuDokuSolver::solveAll_Full( const BoardStatus &boardStatus)
 {
-	return ( boardStatus.m_iProgressRows[0] == 0 );
+	if  ( boardStatus.m_iProgressRows[0] != 9 )
+		return checkForNakedPairs_SingleRow( 0 ) && checkForNakedPairs_SingleRow( 2);
+	else
+		return false;
+	// Loop i 0 -> 9
+	// 	If ColumnProgress != 9
+	// 		Solve columnt
+	// 		*
+	// 	if row Progress != 9
+	// 		solve row
+	// 		*
+	// 	if squareProgress != 9
+	// 		solve square
+	// 		*
+	//
+	// 	pointing pairs
+	// 		*
+	//
+	// 	box/line reduction
+	// 		*
+	//
+	// 	x-wing
+	// 		*
+	//
+	// next
+	
+
+	// * == if successfull and new possibilities removed, return true, otherwise contitnue
+}
+bool CSuDokuSolver::checkForNakedPairs_SingleRow( const short shRow )
+{
+	if ( PRINT_DEBUG )
+		std::cout << "checkForHiddenDoubles_SingleRow " << shRow << std::endl;
+
+	short shColumnIndex2 = 0;
+	bool bFound = false;
+
+	for ( short shColumnIndex1 = 0; shColumnIndex1 < 9; ++shColumnIndex1 )
+	{
+		shColumnIndex2 = shColumnIndex1 + 1;
+		for ( ; shColumnIndex2 < 9; ++shColumnIndex2 )
+		{
+			SuDokuCell::CSuDokuCell cell1 = m_oPossibleNumbers[shColumnIndex1][shRow];
+			SuDokuCell::CSuDokuCell cell2 = m_oPossibleNumbers[shColumnIndex2][shRow];
+
+			//if ( PRINT_DEBUG )
+			//	std::cout   << "Compairing " << shColumnIndex1 << " , " << shRow << cell1 << std::endl
+			//		<< "And        " << shColumnIndex2 << " , " << shRow << cell2 << std::endl;
+
+			if ( cell1.isNakedPair(cell2) )
+			{
+				//bFound = true;
+				//if ( PRINT_DEBUG )
+				std::cout << "...HiddenPair!" << shColumnIndex1 << " , " << shRow << " and " << shColumnIndex2 << " , " << shRow << std::endl;
+				std::cin.ignore();
+
+				// Remove all other instance of the found numbers in this column
+				// TODO : Make this into a function
+				// ...removePosibilities_Column( const short shColum, const short shExcept1, const short shExcept2, const short shDigit1, const short shDigit2)
+				// Where shExcept1 and shExcept1 are the columns that make up the matching pairs ( should not have shDigit1 and shDigit2 removed
+				// TODO2 : Make a MatchingPair struct that holds the positions, and the matchin digits ( ? )
+				for ( int i = 0; i < 9; ++i)
+				{
+					if ( i != shColumnIndex1 && i != shColumnIndex2) {
+						if ( PRINT_DEBUG )
+							std::cout << i << " , " << shRow << "\nRemoving : " << cell1.getHiddenDouble1() << "\nRemoving : " << cell1.getHiddenDouble2() << std::endl;
+						bool bRemoveResult1 = m_oPossibleNumbers[i][shRow].remove( cell1.getHiddenDouble1() );
+						bool bRemoveResult2 = m_oPossibleNumbers[i][shRow].remove( cell1.getHiddenDouble2() );
+
+						if ( bRemoveResult1 || bRemoveResult2 )
+							bFound = true;
+
+					}
+
+				}
+			}
+		}
+	}
+	return bFound;
 }
