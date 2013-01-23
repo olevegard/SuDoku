@@ -330,6 +330,8 @@ void CBoardManager::solveAll( )
 	timespec startTime;
 	timespec stopTime;
 
+	std::cout << "\n\n\n============ Quicksolve ============\n";
+
 	clock_gettime( CLOCK_REALTIME, &startTime );
 
 	m_oSolver.sovleAll_Qucik( true, m_oStatus.m_vUnsolvedPositions );
@@ -348,13 +350,14 @@ void CBoardManager::solveAll( )
 		{
 			m_oBoard.insert( currentDigit );
 			m_oStatus.erasePosition( (*p).getPosition() );
+			std::cout << (*p).getPosition() << " erased!\n";
 			v.erase( p );
 		} else 
 		{
 			++p;
 		}
 	}
-
+	
 
 	if ( 0 == m_oStatus.m_iUnsolvedPosCount )
 	{
@@ -363,12 +366,12 @@ void CBoardManager::solveAll( )
 		m_oBoard.printBoard();
 	} else 
 	{
+		std::cout << "n============ Resolvig possibilities ============\n";
 		if ( m_oSolver.solveAll_Full( m_oStatus ) )
 		{
-			m_oSolver.printAllPosibilities();
+			m_oBoard.printBoard();
+			//m_oSolver.printAllPosibilities();
 			solveAll( );
 		}
 	}
-
-	m_oSolver.printAllPosibilities();
 }

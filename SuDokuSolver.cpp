@@ -365,7 +365,20 @@ short CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v 
 bool CSuDokuSolver::solveAll_Full( const BoardStatus &boardStatus)
 {
 	if  ( boardStatus.m_iProgressRows[0] != 9 )
-		return checkForNakedPairs_SingleRow( 0 ) && checkForNakedPairs_SingleRow( 2);
+	{
+		bool bSuccess = false;
+
+		for ( short i = 0; i < 9; ++i )
+		{
+			if ( checkForNakedPairs_SingleRow( i ) )
+				bSuccess = true;
+			
+			if ( checkForNakedPairs_SingleColumn( i ) )
+				bSuccess = true;
+		}
+
+		return bSuccess;
+	}
 	else
 		return false;
 	// Loop i 0 -> 9
@@ -393,54 +406,129 @@ bool CSuDokuSolver::solveAll_Full( const BoardStatus &boardStatus)
 
 	// * == if successfull and new possibilities removed, return true, otherwise contitnue
 }
-bool CSuDokuSolver::checkForNakedPairs_SingleRow( const short shRow )
+bool CSuDokuSolver::checkForNakedPairs_SingleRow( short iRow )
 {
 	if ( PRINT_DEBUG )
-		std::cout << "checkForHiddenDoubles_SingleRow " << shRow << std::endl;
+		std::cout << "checkForHiddenDoubles_SingleRow " << iRow << std::endl;
 
-	short shColumnIndex2 = 0;
+	short iColumnIndex2 = 0;
 	bool bFound = false;
 
-	for ( short shColumnIndex1 = 0; shColumnIndex1 < 9; ++shColumnIndex1 )
+	for ( short iColumnIndex1 = 0; iColumnIndex1 < 9; ++iColumnIndex1 )
 	{
-		shColumnIndex2 = shColumnIndex1 + 1;
-		for ( ; shColumnIndex2 < 9; ++shColumnIndex2 )
+		iColumnIndex2 = iColumnIndex1 + 1;
+		for ( ; iColumnIndex2 < 9; ++iColumnIndex2 )
 		{
-			SuDokuCell::CSuDokuCell cell1 = m_oPossibleNumbers[shColumnIndex1][shRow];
-			SuDokuCell::CSuDokuCell cell2 = m_oPossibleNumbers[shColumnIndex2][shRow];
+			SuDokuCell::CSuDokuCell cell1 = m_oPossibleNumbers[iColumnIndex1][iRow];
+			SuDokuCell::CSuDokuCell cell2 = m_oPossibleNumbers[iColumnIndex2][iRow];
 
 			//if ( PRINT_DEBUG )
-			//	std::cout   << "Compairing " << shColumnIndex1 << " , " << shRow << cell1 << std::endl
-			//		<< "And        " << shColumnIndex2 << " , " << shRow << cell2 << std::endl;
+			//	std::cout   << "Compairing " << iColumnIndex1 << " , " << iRow << cell1 << std::endl
+			//		<< "And        " << iolumnIndex2 << " , " << iRow << cell2 << std::endl;
 
 			if ( cell1.isNakedPair(cell2) )
 			{
-				//bFound = true;
 				//if ( PRINT_DEBUG )
-				std::cout << "...HiddenPair!" << shColumnIndex1 << " , " << shRow << " and " << shColumnIndex2 << " , " << shRow << std::endl;
-				std::cin.ignore();
+				std::cout << "...HiddenPair! " << iColumnIndex1 << " , " << iRow << " and " << iColumnIndex2 << " , " << iRow << std::endl;
 
 				// Remove all other instance of the found numbers in this column
-				// TODO : Make this into a function
-				// ...removePosibilities_Column( const short shColum, const short shExcept1, const short shExcept2, const short shDigit1, const short shDigit2)
-				// Where shExcept1 and shExcept1 are the columns that make up the matching pairs ( should not have shDigit1 and shDigit2 removed
-				// TODO2 : Make a MatchingPair struct that holds the positions, and the matchin digits ( ? )
-				for ( int i = 0; i < 9; ++i)
-				{
-					if ( i != shColumnIndex1 && i != shColumnIndex2) {
-						if ( PRINT_DEBUG )
-							std::cout << i << " , " << shRow << "\nRemoving : " << cell1.getHiddenDouble1() << "\nRemoving : " << cell1.getHiddenDouble2() << std::endl;
-						bool bRemoveResult1 = m_oPossibleNumbers[i][shRow].remove( cell1.getHiddenDouble1() );
-						bool bRemoveResult2 = m_oPossibleNumbers[i][shRow].remove( cell1.getHiddenDouble2() );
-
-						if ( bRemoveResult1 || bRemoveResult2 )
-							bFound = true;
-
-					}
-
-				}
+				// TODO : Make a MatchingPair struct that holds the positions, and the matchin digits ( ? )
+				bFound = RemovePossibilities_Row( iRow, cell1.getHiddenDouble1(), cell1.getHiddenDouble2(), iColumnIndex1, iColumnIndex2 );
 			}
 		}
 	}
 	return bFound;
+}
+
+bool CSuDokuSolver::checkForNakedPairs_SingleColumn( short iColumn )
+{
+	if ( PRINT_DEBUG )
+		std::cout << "checkForHiddenDoubles_SingleColumn " << iColumn << std::endl;
+
+	short iRowIndex2 = 0;
+	bool bFound = true;
+
+	for ( short iRowIndex1 = 0; iRowIndex1 < 9; ++iRowIndex1 )
+	{
+		iRowIndex2 = iRowIndex1 + 1;
+
+		for ( ; iRowIndex2 < 9; ++iRowIndex2 )
+		{
+			SuDokuCell::CSuDokuCell cell1 = m_oPossibleNumbers[iColumn][iRowIndex1];
+			SuDokuCell::CSuDokuCell cell2 = m_oPossibleNumbers[iColumn][iRowIndex2];
+
+			//if ( PRINT_DEBUG )
+			//	std::cout   << "Compairing " << iColumn << " , " << iRowIndex1 << cell1 << std::endl
+			//		<< "And        " << iColumn << " , " << iRowIndex2 << cell2 << std::endl;
+
+			if ( cell1.isNakedPair(cell2) )
+			{
+				//if ( PRINT_DEBUG )
+				//	std::cout << "...HiddenPair!" << iColumn << " , " << iRowIndex1 << " and " << iColumn << " , " << iRowIndex2
+				//		<< " : " << cell1.shHiddenDouble1 << " & " << cell1.shHiddenDouble2 << std::endl;
+
+				std::cout << "...HiddenPair! " << iColumn << " , " << iRowIndex1 << " and " << iColumn << " , " << iRowIndex2 
+					<< " digit : " << cell1.getHiddenDouble1() << " and " << cell1.getHiddenDouble2() << std::endl;
+
+				// Remove all other instance of the found numbers in this column
+				// TODO : Make a MatchingPair struct that holds the positions, and the matchin digits ( ? )
+				bFound = RemovePossibilities_Column( iColumn, cell1.getHiddenDouble1(), cell1.getHiddenDouble2(), iRowIndex1, iRowIndex2 );
+			} else
+				if ( PRINT_DEBUG )
+				{
+					std::cout << "...Not HiddenPair!\n";
+					std::cout << "=============================================\n";
+				}
+		}
+	}
+	return bFound;
+}
+
+
+bool CSuDokuSolver::RemovePossibilities_Row( short iRow, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 )
+{
+	bool bNewlyErased = false;
+
+	for ( int i = 0; i < 9; ++i)
+	{
+		if ( i != iExcept1 && i != iExcept2 ) {
+
+			//if ( PRINT_DEBUG )
+				std::cout << "   " << i << " , " << iRow << " Removing : " << iHiddenDouble1 << ", " << iHiddenDouble2 << std::endl;
+
+			bool bRemoveResult1 = m_oPossibleNumbers[i][iRow].remove( iHiddenDouble1 );
+			bool bRemoveResult2 = m_oPossibleNumbers[i][iRow].remove( iHiddenDouble2 );
+
+			if ( bRemoveResult1 || bRemoveResult2 )
+				bNewlyErased = true;
+
+		}
+
+	}
+
+	return bNewlyErased;
+}
+
+bool CSuDokuSolver::RemovePossibilities_Column( short iColumn, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 )
+{
+	bool bNewlyErased = false;
+
+	for ( int i = 0; i < 9; ++i)
+	{
+		if ( i != iExcept1 && i != iExcept2 ) {
+
+			//if ( PRINT_DEBUG )
+				std::cout << "   " << iColumn << " , " << i << " Removing : " << iHiddenDouble1 << ", " << iHiddenDouble2 << std::endl;
+
+			bool bRemoveResult1 = m_oPossibleNumbers[iColumn][i].remove( iHiddenDouble1 );
+			bool bRemoveResult2 = m_oPossibleNumbers[iColumn][i].remove( iHiddenDouble2 );
+
+			if ( bRemoveResult1 || bRemoveResult2 )
+				bNewlyErased = true;
+
+		}
+
+	}
+
+	return bNewlyErased;
 }

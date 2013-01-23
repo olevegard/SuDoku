@@ -68,5 +68,15 @@ class CSuDokuSolver{
 		// Keeps track of all possible numbers for all positions
 		SuDokuCell::CSuDokuCell m_oPossibleNumbers[9][9];
 
-		bool checkForNakedPairs_SingleRow( const short shRow );
+		// Solver methods...
+		bool checkForNakedPairs_SingleRow( short iRow );
+
+
+		bool checkForNakedPairs_SingleColumn( short iColumn );
+
+		// Remove helper
+		bool RemovePossibilities_Row   ( short iRow   , short iHiddenDouble1, short iHiddenDOuble2, short iExcept1, short iExcept2 );
+		bool RemovePossibilities_Column( short iColumn, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 );
+
+
 };
