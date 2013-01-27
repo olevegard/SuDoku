@@ -42,6 +42,8 @@ void setAndMarkAsSolved( short iDigit );
 void addPossibleDigit( const short shDigit );
 
 void removeAllPosibilities();
+void removeAllPosibilitiesExcept( short iDigit );
+
 bool removePossibleDigit( const short shDigit );
 
 short tryToSolveCell();

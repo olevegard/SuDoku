@@ -11,6 +11,15 @@ namespace SuDokuCell
 		m_iDigit = iDigit;
 
 	}
+
+	void CSuDokuCell::removeAllPosibilitiesExcept( short iDigit )
+	{
+		for ( short i = 0; i < 9; ++i )
+		{
+			if ( i != iDigit )
+				removePossibleDigit(i);
+		}
+	}
 /*
 	void  CSuDokuCell::addPossibleDigit( const short iDigit )
 	{

@@ -35,7 +35,7 @@ class CBoardManager{
 
 		void solveNext( );
 		void solveAll( );
-
+		inline bool solveIteration( );
 
 
 	private:

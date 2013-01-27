@@ -326,18 +326,43 @@ void CBoardManager::solveNext()
 }
 void CBoardManager::solveAll( )
 {
-
 	timespec startTime;
 	timespec stopTime;
 
-	std::cout << "\n\n\n============ Quicksolve ============\n";
 
 	clock_gettime( CLOCK_REALTIME, &startTime );
+
+		//m_oBoard.printBoard();
+	short iIterationCount = 0;
+	bool bContinue = true;
+	while ( m_oStatus.m_iUnsolvedPosCount > 0 && iIterationCount < 50 && bContinue )
+	{
+		bContinue = solveIteration();
+		++iIterationCount;
+	}
+	
+	clock_gettime( CLOCK_REALTIME, &stopTime );
+	std::cout << "============ Solving done ============\n";
+	std::cout << "Iteration count : " << iIterationCount << std::endl;
+	m_oBoard.printBoard();
+
+	CLogTool::LogTime( startTime, stopTime );
+
+}
+
+bool CBoardManager::solveIteration()
+{
+	
+	if ( PRINT_DEBUG )
+		std::cout << "============ Quicksolve ============\n";
 
 	m_oSolver.sovleAll_Qucik( true, m_oStatus.m_vUnsolvedPositions );
 
 	std::vector<Digit> &v = m_oStatus.m_vUnsolvedPositions;
 	std::vector<Digit>::iterator p = v.begin();
+
+	if ( PRINT_DEBUG )
+		std::cout << "   Unsolved count pre remoove : " << m_oStatus.m_iUnsolvedPosCount << std::endl;
 
 	for ( ; p != v.end();  )
 	{
@@ -350,28 +375,30 @@ void CBoardManager::solveAll( )
 		{
 			m_oBoard.insert( currentDigit );
 			m_oStatus.erasePosition( (*p).getPosition() );
-			std::cout << (*p).getPosition() << " erased!\n";
+
+			if ( PRINT_DEBUG )
+				std::cout << (*p).getPosition() << "   erased!\n";
+
 			v.erase( p );
 		} else 
 		{
 			++p;
 		}
 	}
-	
+	if ( PRINT_DEBUG )
+		std::cout << "   Unsolved count post remove : " << m_oStatus.m_iUnsolvedPosCount << std::endl;
 
-	if ( 0 == m_oStatus.m_iUnsolvedPosCount )
+	if ( 0 != m_oStatus.m_iUnsolvedPosCount )
 	{
-		clock_gettime( CLOCK_REALTIME, &stopTime );
-		CLogTool::LogTime( startTime, stopTime );
-		m_oBoard.printBoard();
-	} else 
-	{
-		std::cout << "n============ Resolvig possibilities ============\n";
+
+		if ( PRINT_DEBUG )
+			std::cout << "============ Resolvig possibilities ============\n";
 		if ( m_oSolver.solveAll_Full( m_oStatus ) )
-		{
-			m_oBoard.printBoard();
-			//m_oSolver.printAllPosibilities();
-			solveAll( );
-		}
+			return true;
 	}
+
+	if ( PRINT_DEBUG )
+		std::cout << "\n============ Iteration done ============\n";
+
+	return true;
 }

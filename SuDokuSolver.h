@@ -48,6 +48,9 @@ class CSuDokuSolver{
 		// -  -  -
 		// If the digit is solved witht 2 as the value
 		void printAllPosibilities();
+
+		bool checkForNakedPossibility_Column( short iColumn );
+		bool checkForNakedPossibility_Row   ( short iRow );
 	private:
 
 		// This method is inteded to clean up the possibilities for the row.
@@ -68,10 +71,9 @@ class CSuDokuSolver{
 		// Keeps track of all possible numbers for all positions
 		SuDokuCell::CSuDokuCell m_oPossibleNumbers[9][9];
 
+
 		// Solver methods...
 		bool checkForNakedPairs_SingleRow( short iRow );
-
-
 		bool checkForNakedPairs_SingleColumn( short iColumn );
 
 		// Remove helper
