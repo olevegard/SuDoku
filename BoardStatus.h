@@ -24,6 +24,8 @@ struct BoardStatus
 
 				m_vUnsolvedPositions.push_back( Digit( vector2d(iX, iY) ) );
 				m_iUnsolvedPosCount++;
+					
+				m_bDigitFoundInRow[iX][iY] = false;
 			}
 		}
 
@@ -61,7 +63,15 @@ struct BoardStatus
 		--m_iProgressColumns[pos.y];
 	}
 
+	bool IsDigitFoundInRow( short iRow, short iDigit ) const
+	{
+		return m_bDigitFoundInRow[iRow][iDigit];
+	}
 
+	void SetDigitFoundInRow( short iRow, short iDigit )
+	{
+		m_bDigitFoundInRow[iRow][iDigit] = true;
+	}
 	// Arrays storiing progress for row/column/squares
 	// Used for optimization purposes
 	int m_iProgressRows[9];
@@ -73,7 +83,8 @@ struct BoardStatus
 
 	// All unsolved positions
 	std::vector<Digit> m_vUnsolvedPositions;
-
+private:
+	bool m_bDigitFoundInRow[9][9];
 };
 
 

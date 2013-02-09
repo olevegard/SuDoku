@@ -314,7 +314,6 @@ short CSuDokuSolver::solve( const vector2d &pos )
 	return iDigit;
 }
 
-
 short CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v )
 {
 
@@ -364,38 +363,41 @@ short CSuDokuSolver::sovleAll_Qucik( bool bLoopSeveral, std::vector< Digit > &v 
 }
 bool CSuDokuSolver::solveAll_Full( const BoardStatus &boardStatus)
 {
-	if  ( boardStatus.m_iProgressRows[0] != 9 )
+	bool bSuccess = false;
+
+	for ( short i = 0; i < 9; ++i )
 	{
-		bool bSuccess = false;
 
-		for ( short i = 0; i < 9; ++i )
+		if ( boardStatus.m_iProgressColumns[i] < 8 )
 		{
-			if ( boardStatus.m_iProgressColumns[i] < 8 )
-			{
-				if ( checkForNakedPossibility_Row( i ) )
-				{
-					bSuccess = true;
-				}
+			if ( checkForNakedPossibility_Row( i ) )
+				bSuccess = true;
 
-				if ( checkForNakedPairs_SingleRow( i ) )
-					bSuccess = true;
-			}
-			
-			if ( boardStatus.m_iProgressRows[i] < 8 )
-			{
-				if ( checkForNakedPossibility_Column( i ) )
-				{
-					bSuccess = true;
-				}
-				if ( checkForNakedPairs_SingleColumn( i ) )
-					bSuccess = true;
-			}
+			if ( checkForNakedPairs_SingleRow( i ) )
+				bSuccess = true;
 		}
 
-		return bSuccess;
+		if ( boardStatus.m_iProgressRows[i] < 8 )
+		{
+			if ( checkForNakedPossibility_Column( i ) )
+				bSuccess = true;
+
+			if ( checkForNakedPairs_SingleColumn( i ) )
+				bSuccess = true;
+		}
+
+		if ( boardStatus.m_iProgressSquares[i] < 8 )
+		{
+			if ( checkForNakedPossibility_Square( i ) )
+				bSuccess = true;
+				
+			if ( checkForNakedPairs_SingleSquare( i ) )
+				bSuccess = true;
+		}
+		
 	}
-	else
-		return false;
+
+	return bSuccess;
 	// Loop i 0 -> 9
 	// 	If ColumnProgress != 9
 	// 		Solve columnt
@@ -417,15 +419,19 @@ bool CSuDokuSolver::solveAll_Full( const BoardStatus &boardStatus)
 	// 		*
 	//
 	// next
-	
+
 
 	// * == if successfull and new possibilities removed, return true, otherwise contitnue
 }
 bool CSuDokuSolver::checkForNakedPossibility_Row ( short iRow )
 {
+
 	bool bFound = false;
 	for ( short iDigit = 0; iDigit < 9; ++iDigit )
 	{
+//		if ( boardStatus.IsDigitFoundInRow( iRow, iDigit ) )
+//			continue;
+
 		short iCount = 0;
 		short iPos = 0;
 		for ( short i = 0; i < 9; ++i )
@@ -475,6 +481,48 @@ bool CSuDokuSolver::checkForNakedPossibility_Column( short iColumn )
 				std::cout << "single pos : " << iColumn << " , " << iPos << " digit : " << iDigit + 1 << std::endl;
 			bFound = true;
 			m_oPossibleNumbers[iColumn][iPos].removeAllPosibilitiesExcept(iDigit);
+		}
+	}
+	return bFound;
+}
+bool CSuDokuSolver::checkForNakedPossibility_Square( short iSquare )
+{
+	if ( PRINT_DEBUG )
+		std::cout << "checkForNakePossibility_SingleSquare " << iSquare << std::endl;
+
+	vector2d posOrigo;
+	getPositionOfSquare( iSquare, posOrigo);
+
+	bool bFound = false;
+
+	for ( short iDigit = 0; iDigit < 9; ++iDigit )
+	{
+		short iCount = 0;
+		vector2d pos;
+		vector2d posFound;
+
+		for ( short i = 0; i < 9; ++i )
+		{
+			pos.x = posOrigo.x + ( i % 3 );
+			pos.y = posOrigo.y + ( i / 3 );
+			if ( m_oPossibleNumbers[pos.x][pos.y].isPossible( iDigit ) )
+			{
+				if ( PRINT_DEBUG )
+					std::cout << iDigit + 1 << " found at " << pos << std::endl;
+
+				if ( iCount == 0 )
+					posFound = pos;
+				++iCount;
+			}
+		}
+
+		if ( iCount == 1 )
+		{
+			if ( PRINT_DEBUG )
+				std::cout << "single pos : " << posFound << " digit : " << iDigit + 1 << std::endl;
+
+			bFound = true;
+			m_oPossibleNumbers[posFound.x][posFound.y].removeAllPosibilitiesExcept(iDigit);
 		}
 	}
 	return bFound;
@@ -556,7 +604,57 @@ bool CSuDokuSolver::checkForNakedPairs_SingleColumn( short iColumn )
 	}
 	return bFound;
 }
+bool CSuDokuSolver::checkForNakedPairs_SingleSquare( short iSquare ) {
 
+	if ( PRINT_DEBUG)
+		std::cout << "checkForHiddenDoubles_SingleSquare " << iSquare << std::endl;
+
+	vector2d posOrigo;
+	getPositionOfSquare( iSquare, posOrigo);
+
+	short iSquareIndex2 = 0;
+	bool bFound = false;
+
+	for ( short iSquareIndex = 0; iSquareIndex < 9; ++iSquareIndex )
+	{
+		iSquareIndex2 = iSquareIndex + 1;
+		for ( ; iSquareIndex2 < 9; ++iSquareIndex2 )
+		{
+
+			vector2d pos1( posOrigo.x + ( iSquareIndex % 3 ),
+					posOrigo.y + ( iSquareIndex / 3 ));
+
+			vector2d pos2( posOrigo.x + ( iSquareIndex2 % 3 ),
+					posOrigo.y + ( iSquareIndex2 / 3 ));
+
+			SuDokuCell::CSuDokuCell cell1 = m_oPossibleNumbers[pos1.x][pos1.y];
+			SuDokuCell::CSuDokuCell cell2 = m_oPossibleNumbers[pos2.x][pos2.y];
+
+			// Checkinf for naked pair two cell with only the two same numbers..
+			if ( cell1.isNakedPair(cell2) )
+			{
+				
+
+				if ( PRINT_DEBUG )
+				{
+					std::cout << "...HiddenPair!" << pos1 << " and " << pos2
+						<< " : " << cell1.getHiddenDouble1() << " & " << cell1.getHiddenDouble2() << std::endl;
+					std::cin.ignore();
+				}
+				// Remove all other instance of the found numbers in this column
+				// TODO : Make this into a function
+				// ...removePosibilities_Column( const short shColum, const short shExcept1, const short shExcept2, const short shDigit1, const short shDigit2)
+				// Where shExcept1 and shExcept1 are the columns that make up the matching pairs ( should not have shDigit1 and shDigit2 removed
+				// TODO2 : Make a MatchingPair struct that holds the positions, and the matchin digits ( ? )
+				bFound = RemovePossibilities_Square( posOrigo, cell1.getHiddenDouble1(), cell1.getHiddenDouble2(), iSquareIndex, iSquareIndex2 );
+			} // End check for naked pair
+
+			// Check for hidden pair
+		}
+	}
+
+	return bFound;
+}
 
 bool CSuDokuSolver::RemovePossibilities_Row( short iRow, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 )
 {
@@ -565,7 +663,7 @@ bool CSuDokuSolver::RemovePossibilities_Row( short iRow, short iHiddenDouble1, s
 	for ( int i = 0; i < 9; ++i)
 	{
 		if ( i != iExcept1 && i != iExcept2 ) {
-
+			
 			if ( PRINT_DEBUG )
 				std::cout << "   " << " Removing : " << iHiddenDouble1 << ", " << iHiddenDouble2 << std::endl;
 
@@ -599,9 +697,83 @@ bool CSuDokuSolver::RemovePossibilities_Column( short iColumn, short iHiddenDoub
 			if ( bRemoveResult1 || bRemoveResult2 )
 				bNewlyErased = true;
 
+
 		}
 
 	}
 
 	return bNewlyErased;
+}
+
+bool CSuDokuSolver::RemovePossibilities_Square( const vector2d &posOrigo, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 )
+{
+	bool bNewlyErased = false;
+
+	for ( int i = 0; i < 9; ++i)
+	{
+		if ( i != iExcept1 && i != iExcept2 ) {
+
+			if ( PRINT_DEBUG )
+				std::cout << "   " << posOrigo << " , " << i << " Removing : " << iHiddenDouble1 << ", " << iHiddenDouble2 << std::endl;
+
+			vector2d pos( posOrigo.x + ( i% 3 ),
+					posOrigo.y + ( i/ 3 ));
+
+			bool bRemoveResult1 = m_oPossibleNumbers[pos.x][pos.y].remove( iHiddenDouble1 );
+			bool bRemoveResult2 = m_oPossibleNumbers[pos.x][pos.y].remove( iHiddenDouble2 );
+			
+
+			if ( bRemoveResult1 || bRemoveResult2 )
+				bNewlyErased = true;
+		}
+
+	}
+
+	return bNewlyErased;
+}
+
+
+
+void CSuDokuSolver::getPositionOfSquare ( short iSquare, vector2d& posOrigo )
+{
+	switch ( iSquare) {
+		case 0:
+			posOrigo.x = 0;
+			posOrigo.y = 0;
+			break;
+		case 1:
+			posOrigo.x = 3;
+			posOrigo.y = 0;
+			break;
+		case 2:
+			posOrigo.x = 6;
+			posOrigo.y = 0;
+			break;
+		case 3:
+			posOrigo.x = 0;
+			posOrigo.y = 3;
+			break;
+		case 4:
+			posOrigo.x = 3;
+			posOrigo.y = 3;
+			break;
+		case 5:
+			posOrigo.x = 6;
+			posOrigo.y = 3;
+			break;
+		case 6:
+			posOrigo.x = 0;
+			posOrigo.y = 6;
+			break;
+		case 7:
+			posOrigo.x = 3;
+			posOrigo.y = 6;
+			break;
+		case 8:
+			posOrigo.x = 6;
+			posOrigo.y = 6;
+			break;
+		default:
+			break;
+	}
 }

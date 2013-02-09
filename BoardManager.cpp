@@ -303,6 +303,7 @@ void CBoardManager::insert( const vector2d &pos, short iDigit )
 		//UpdateSolveInformation( pos );
 
 		m_oSolver.insert( pos, iDigit );
+//		m_oStatus.SetDigitFoundInRow( pos.y, iDigit );
 	}
 
 }

@@ -51,6 +51,7 @@ class CSuDokuSolver{
 
 		bool checkForNakedPossibility_Column( short iColumn );
 		bool checkForNakedPossibility_Row   ( short iRow );
+		bool checkForNakedPossibility_Square( short iSquare );
 	private:
 
 		// This method is inteded to clean up the possibilities for the row.
@@ -75,10 +76,12 @@ class CSuDokuSolver{
 		// Solver methods...
 		bool checkForNakedPairs_SingleRow( short iRow );
 		bool checkForNakedPairs_SingleColumn( short iColumn );
+		bool checkForNakedPairs_SingleSquare( short iSquare );
 
 		// Remove helper
 		bool RemovePossibilities_Row   ( short iRow   , short iHiddenDouble1, short iHiddenDOuble2, short iExcept1, short iExcept2 );
 		bool RemovePossibilities_Column( short iColumn, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 );
+		bool RemovePossibilities_Square( const vector2d &posOrigo, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 );
 
-
+		void getPositionOfSquare ( short iSquare, vector2d& posOrigo );
 };
