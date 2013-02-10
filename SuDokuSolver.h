@@ -49,39 +49,65 @@ class CSuDokuSolver{
 		// If the digit is solved witht 2 as the value
 		void printAllPosibilities();
 
-		bool checkForNakedPossibility_Column( short iColumn );
-		bool checkForNakedPossibility_Row   ( short iRow );
-		bool checkForNakedPossibility_Square( short iSquare );
 	private:
-
-		// This method is inteded to clean up the possibilities for the row.
-		// It will mark a Cell as solved, and will remove all impossible digits for every positons.
-		// This method is inteded to be used when trying to solve a single digit and you need extra information
-		// Or when trying to solve the entire board.
-		// Returns true whenever a something has been updated, if so update() needs to be run.
-		bool solveRow( short shRow );
-
-		// A helper method for solve row.
-		// Will find count of every digit and the first position it was found in
-		// Returns true if anything has been updated.
-		bool solveRow_Helper( short shRow );
 
 		// Removes a digit from m_oPossibleNumbers
 		void removePossibilitiesInsert( const vector2d &pos, const short shDigit );
 
-		// Keeps track of all possible numbers for all positions
-		SuDokuCell::CSuDokuCell m_oPossibleNumbers[9][9];
-
 
 		// Solver methods...
-		bool checkForNakedPairs_SingleRow( short iRow );
+		
+		// Checks for a single digit on a columnt/row/square
+		// If success : thtis digit can be removed from all other cells in column/row/square
+		bool checkForHiddenSingle_Column( short iColumn );
+		bool checkForHiddenSingle_Row   ( short iRow    );
+		bool checkForHiddenSingle_Square( short iSquare );
+	
+		bool checkForNakedSingle_Row	( short iRow )
+		{
+			bool bFound = false;
+
+			for ( short i = 0; i < 9 ; ++i)
+			{
+				printAllPosibilities();
+				short digit = m_oPossibleNumbers[i][iRow].solve( );
+				if ( digit != -1 )
+				{
+					bFound = true;
+					std::cout << "Foudn naked single in " << i << " , " << iRow << " digit : " << digit + 1 << std::endl;
+					printAllPosibilities();
+					std::cin.ignore();
+				}
+			}
+
+			return bFound;
+		}
+		// Checks for two cells with the same two digis.
+		// NOTE 1 : these cells can have more than these two digits
+		// NOTE 2 : the digit pair found must not be found anywhere else in this column/row/square
+		// If success : all digits except the hidden pair can be removed from these two cells.
+		bool checkForHiddenPairs_SingleRow ( short iRow );
+
+		// Checks for two cells with only the same two digis.
+		// If success : these two digits can be removed from all other cells in column/row/square
+		bool checkForNakedPairs_SingleRow   ( short iRow    );
 		bool checkForNakedPairs_SingleColumn( short iColumn );
 		bool checkForNakedPairs_SingleSquare( short iSquare );
 
+		short getCountOfDigitInRow ( short iRow, short iDigit );
 		// Remove helper
-		bool RemovePossibilities_Row   ( short iRow   , short iHiddenDouble1, short iHiddenDOuble2, short iExcept1, short iExcept2 );
-		bool RemovePossibilities_Column( short iColumn, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 );
+		//	Removes digits from the row/column/sqaure specified in the first argument
+		//	Removes only the two digits specified in argument two and three
+		//	Does not remove the digits specified in the two last arguments
+		bool RemovePossibilities_Row   ( short iRow              , short iHiddenDouble1, short iHiddenDOuble2, short iExcept1, short iExcept2 );
+		bool RemovePossibilities_Column( short iColumn           , short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 );
 		bool RemovePossibilities_Square( const vector2d &posOrigo, short iHiddenDouble1, short iHiddenDouble2, short iExcept1, short iExcept2 );
 
-		void getPositionOfSquare ( short iSquare, vector2d& posOrigo );
+		// Helper function to convert an int ( 0-9 identification of square ) into a vector2d
+		void getPositionOfSquare ( short iSquare, vector2d& posOrigo ) const;
+
+		// Variables
+		// =======================================================================================
+		// Keeps track of all possible numbers for all positions
+		SuDokuCell::CSuDokuCell m_oPossibleNumbers[9][9];
 };

@@ -19,7 +19,7 @@ CSuDokuCell()
 	, m_iHiddenDouble3(0)
 
 	, m_iCountPossible(9)
-	, m_iDigit(0)
+	, m_iDigit(-1)
 #ifdef __unix__
 	, m_bPossibleNumbers({true,true,true,true,true,true,true,true,true})
 #endif

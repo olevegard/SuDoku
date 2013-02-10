@@ -73,13 +73,13 @@ namespace SuDokuCell
 	}
 	void  CSuDokuCell::removeAllExceptPair ( const short iDigit1, const short iDigit2 )
 	{
-		for ( short iCurrentDigit = 1; iCurrentDigit < 9; ++iCurrentDigit )
+		for ( short iCurrentDigit = 0; iCurrentDigit < 9; ++iCurrentDigit )
 		{
 			if ( iCurrentDigit == iDigit1 || iCurrentDigit == iDigit2 )
 				continue;
-
-			m_bPossibleNumbers[iCurrentDigit - 1] = false;
-
+			
+			remove( iCurrentDigit );
+			//m_bPossibleNumbers[iCurrentDigit] = false;
 		}
 	}
 
@@ -144,34 +144,36 @@ namespace SuDokuCell
 
 	short CSuDokuCell::solve()
 	{
-	if ( PRINT_DEBUG )
-		std::cout << "Solving cell---" << std::endl;
-
-	if (m_bSolved )
-	{
 		if ( PRINT_DEBUG )
-			std::cout << "   Allready solved" << std::endl;
+			std::cout << "Solving cell---" << std::endl;
 
-		return -1;
-	}
-
-	if ( m_iCountPossible == 1 )
-	{
-		for ( short i = 0; i < 9; ++i )
+		if (m_bSolved )
 		{
 			if ( PRINT_DEBUG )
-				std::cout << "   Solving digit : " << i << std::endl;
+				std::cout << "   Allready solved" << std::endl;
 
-			if ( m_bPossibleNumbers[i] )
+			return -1;
+		}
+
+		if ( m_iCountPossible == 1 )
+		{
+			for ( short i = 0; i < 9; ++i )
 			{
-				setAndMarkAsSolved( i );
-				return i;
+				if ( PRINT_DEBUG )
+					std::cout << "   Solving digit : " << i << std::endl;
+
+				if ( m_bPossibleNumbers[i] )
+				{
+					//removeAllPosibilitiesExcept(i);
+					//removeAllPosibilities(
+					setAndMarkAsSolved( i );
+					return i;
+				}
 			}
 		}
-	}
 
-	return -1;
-}
+		return -1;
+	} // End struct Cell
 	// opeator << defined as a non-member function as it shouold be
 	inline std::ostream& operator<<(std::ostream& stream, const CSuDokuCell& cell)
 	{

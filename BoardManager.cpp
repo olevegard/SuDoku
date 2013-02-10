@@ -346,7 +346,7 @@ void CBoardManager::solveAll( )
 	std::cout << "============ Solving done ============\n";
 	std::cout << "Iteration count : " << iIterationCount << std::endl;
 	m_oBoard.printBoard();
-
+	m_oSolver.printAllPosibilities();
 	CLogTool::LogTime( startTime, stopTime );
 
 }
